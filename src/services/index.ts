@@ -1,3 +1,3 @@
-import searchRoutes from "./search/routes";
+import lectureRoutes from "./lecture/routes";
 
-export default [...searchRoutes];
+export default [...lectureRoutes];
