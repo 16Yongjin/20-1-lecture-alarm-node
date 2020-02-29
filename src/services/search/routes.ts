@@ -1,11 +1,17 @@
 import { Request, Response } from "express";
+import { getLectures } from "./SearchController";
+import { checkLectureParams } from "../../middleware/checks";
 
 export default [
   {
-    path: "/",
+    path: "/lectures",
     method: "get",
-    handler: async (req: Request, res: Response) => {
-      res.send("Hello world!");
-    }
+    handler: [
+      checkLectureParams,
+      async ({ query }: Request, res: Response) => {
+        const lectures = await getLectures(query.courseId);
+        res.send(lectures);
+      }
+    ]
   }
 ];

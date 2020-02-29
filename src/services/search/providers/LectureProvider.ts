@@ -5,6 +5,16 @@ import cheerio from "cheerio";
 
 // dotenv.config();
 
+type Lecture = {
+  index: number;
+  id: string;
+  name: string;
+  professor: string;
+  time: string;
+  courseId: string;
+  isEmpty: boolean;
+};
+
 const url = "https://wis.hufs.ac.kr/src08/jsp/lecture/LECTURE2020L.jsp";
 
 const buildForm = (courseId: string) => {
@@ -22,61 +32,49 @@ const buildForm = (courseId: string) => {
 const fetchCourseHtml = (courseId: string) =>
   request.post(url, { form: buildForm(courseId) });
 
-const infos = {
-  0: "index",
-  3: "id",
-  4: "name",
-  11: "professor",
-  14: "time",
-  15: "people"
-};
-
-type Lecture = {
-  index: number;
-  id: string;
-  name: string;
-  professor: string;
-  time: string;
-  people: string;
-};
-
 const trim = (str: string) =>
   str
     .trim()
     .replace(/\s{2,}/, "")
     .replace(/\s?\(.+$/, "");
 
-function fromEntries<T>(entries: [keyof T, T[keyof T]][]): T {
-  return entries.reduce(
-    (acc, [key, value]) => ({ ...acc, [key]: value }),
-    <T>{}
-  );
+function isEmpty(people: string): boolean {
+  try {
+    return Boolean(people && eval(people) < 1);
+  } catch {
+    return false;
+  }
 }
 
-export const getLectures = async (courseId: string) => {
+export const getLectures = async (courseId: string): Promise<Lecture[]> => {
   const html = await fetchCourseHtml(courseId);
   const $ = cheerio.load(html);
 
   const trs = $("#premier1 tr");
 
-  const lectures = $(trs)
-    .map((idx, tr) => {
-      if (!idx) return;
+  const lectures: Lecture[] = $(trs)
+    .map((index, tr) => {
+      if (!index) return;
 
       const tds = $(tr).children("td");
 
-      const lecture = fromEntries(
-        Object.entries(infos).map(([key, value]) => [
-          value,
-          trim(tds.eq(Number(key)).text())
-        ])
+      const [id, name, professor, time, people] = [3, 4, 11, 14, 15].map(i =>
+        trim(tds.eq(i).text())
       );
+
+      const lecture: Lecture = {
+        index: index - 1,
+        courseId,
+        id,
+        name,
+        professor,
+        time,
+        isEmpty: isEmpty(people)
+      };
 
       return lecture;
     })
     .get();
 
-  console.log(lectures);
+  return lectures;
 };
-
-getLectures("AAR01_H1");

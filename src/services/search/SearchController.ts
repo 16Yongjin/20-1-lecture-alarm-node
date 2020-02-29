@@ -1,3 +1,3 @@
-export const getLecturesByDept = async (dept: string) => {
-  return [];
-};
+import { getLectures } from "./providers/LectureProvider";
+
+export { getLectures };
