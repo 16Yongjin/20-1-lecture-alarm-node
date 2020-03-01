@@ -46,7 +46,7 @@
     "typeorm": "^0.2.24"
   },
   "jest": {
-    "verbose": true,
+    "verbose": false,
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },

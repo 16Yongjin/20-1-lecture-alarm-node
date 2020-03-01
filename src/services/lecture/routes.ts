@@ -4,9 +4,9 @@ import { checkLectureParams } from "../../middleware/checks";
 
 export default [
   {
-    path: "/lectures",
+    path: "/lectures/:courseId",
     method: "get",
-    handler: [checkLectureParams, findLectures]
+    handler: findLectures
   },
   {
     path: "/storeLectures",

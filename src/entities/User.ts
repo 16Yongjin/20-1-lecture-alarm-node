@@ -1,14 +1,23 @@
 import { Lecture } from ".";
-import { Entity, PrimaryColumn, BaseEntity, ManyToMany } from "typeorm";
+import {
+  Entity,
+  BaseEntity,
+  OneToOne,
+  Column,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  PrimaryColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable
+} from "typeorm";
 
 @Entity()
 export class User extends BaseEntity {
   @PrimaryColumn("text")
-  id: string;
+  user: string;
 
-  @ManyToMany(
-    () => Lecture,
-    lecture => lecture.users
-  )
+  @ManyToMany(() => Lecture)
+  @JoinTable()
   lectures: Lecture[];
 }

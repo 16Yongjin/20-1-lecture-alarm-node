@@ -5,12 +5,14 @@ import { chunk, flatten } from "lodash";
 import { courseIds } from "./providers/data";
 
 export const findLectures = async (
-  { query }: Request,
+  { params }: Request,
   res: Response
 ): Promise<void> => {
-  const course_id = query.courseId;
+  const course_id = params.courseId;
 
   const lectures = await Lecture.find({ where: { course_id } });
+
+  console.log(lectures.slice(0, 3));
 
   res.send(lectures);
 };
@@ -19,8 +21,6 @@ export const storeLectures = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  console.log(chunk(courseIds.slice(0, 10), 10));
-
   for (const courses of chunk(courseIds, 10)) {
     console.log(`fething : ${courses.join(", ")}`);
 
@@ -28,8 +28,6 @@ export const storeLectures = async (
 
     const newLectures = lectures.map(lecture => {
       const newLecture = new Lecture();
-
-      console.log(lecture.name);
 
       newLecture.id = lecture.id;
       newLecture.index = lecture.index;

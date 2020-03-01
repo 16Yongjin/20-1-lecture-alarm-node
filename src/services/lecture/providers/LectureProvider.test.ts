@@ -1,7 +1,7 @@
 import * as Provider from "./LectureProvider";
 
 describe("LectureProvider", () => {
-  test("ATMB3_H1", async () => {
+  test.skip("ATMB3_H1", async () => {
     const result = await Provider.getLectures("ATMB3_H1");
 
     const expected = [

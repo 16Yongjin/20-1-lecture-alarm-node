@@ -1,4 +1,3 @@
-import { User } from ".";
 import { Entity, Column, PrimaryColumn, BaseEntity, ManyToMany } from "typeorm";
 
 @Entity()
@@ -20,10 +19,4 @@ export class Lecture extends BaseEntity {
 
   @Column()
   course_id: string;
-
-  @ManyToMany(
-    () => User,
-    user => user.lectures
-  )
-  users: User[];
 }

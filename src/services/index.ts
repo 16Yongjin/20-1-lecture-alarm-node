@@ -1,3 +1,4 @@
 import lectureRoutes from "./lecture/routes";
+import userRoutes from "./user/routes";
 
-export default [...lectureRoutes];
+export default [...lectureRoutes, ...userRoutes];

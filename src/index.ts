@@ -1,12 +1,7 @@
 import "dotenv/config";
 import "reflect-metadata";
-import express from "express";
-
-import establishDatabaseConnection from "./database/connect";
-import { applyMiddleware, applyRoutes } from "./utils";
-import middleware from "./middleware";
-import routes from "./services";
-import errorHandlers from "./middleware/errorHandlers";
+import createDatabaseConnection from "./database/connect";
+import initializeApp from "./app";
 
 process.on("uncaughtException", e => {
   console.log(e);
@@ -18,12 +13,10 @@ process.on("unhandledRejection", e => {
   process.exit(1);
 });
 
-const initializeExpress = (): void => {
-  const app = express();
+const main = async () => {
+  await createDatabaseConnection();
 
-  applyMiddleware(middleware, app);
-  applyRoutes(routes, app);
-  applyMiddleware(errorHandlers, app);
+  const app = initializeApp();
 
   const { PORT = 3000 } = process.env;
 
@@ -32,9 +25,4 @@ const initializeExpress = (): void => {
   );
 };
 
-const initializeApp = async (): Promise<void> => {
-  await establishDatabaseConnection();
-  initializeExpress();
-};
-
-initializeApp();
+main();
