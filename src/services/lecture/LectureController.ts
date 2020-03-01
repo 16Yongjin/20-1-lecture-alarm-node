@@ -5,15 +5,10 @@ import { chunk, flatten } from "lodash";
 import { courseIds } from "./providers/data";
 
 export const findLectures = async (
-  { params }: Request,
+  { params: { courseId } }: Request,
   res: Response
 ): Promise<void> => {
-  const course_id = params.courseId;
-
-  const lectures = await Lecture.find({ where: { course_id } });
-
-  console.log(lectures.slice(0, 3));
-
+  const lectures = await Lecture.find({ where: { courseId } });
   res.send(lectures);
 };
 
@@ -21,23 +16,18 @@ export const storeLectures = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const count = await Lecture.count();
+  if (count >= 2122) {
+    res.send("already stored lectures");
+    return;
+  }
+
   for (const courses of chunk(courseIds, 10)) {
     console.log(`fething : ${courses.join(", ")}`);
 
     const lectures = flatten(await Promise.all(courses.map(getLectures)));
 
-    const newLectures = lectures.map(lecture => {
-      const newLecture = new Lecture();
-
-      newLecture.id = lecture.id;
-      newLecture.index = lecture.index;
-      newLecture.course_id = lecture.courseId;
-      newLecture.name = lecture.name;
-      newLecture.time = lecture.time;
-      newLecture.professor = lecture.professor;
-
-      return newLecture;
-    });
+    const newLectures = lectures.map(lecture => Lecture.create(lecture));
 
     console.log("저장 중..");
 

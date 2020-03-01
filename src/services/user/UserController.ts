@@ -1,34 +1,53 @@
 import { Request, Response } from "express";
 import { User, Lecture } from "../../entities";
 
-export const findUserUser = async (
-  { params }: Request,
+export const findUserAlarm = async (
+  { params: { id } }: Request,
   res: Response
 ): Promise<void> => {
-  const user = await User.findOne({
-    where: { user: params.user },
-    relations: ["lectures"]
-  });
+  let user = await User.findOne({ where: { id }, relations: ["lectures"] });
 
-  res.send(user);
+  if (!user) {
+    user = await User.create({ id, lectures: [] }).save();
+    console.log("user created", user);
+  }
+
+  res.send(user.lectures);
 };
 
-export const addUser = async (
-  { body }: Request,
+export const addUserAlarm = async (
+  { body: { userId, lectureId } }: Request,
   res: Response
 ): Promise<void> => {
-  const { user, lectureId } = body;
-
   const lecture = await Lecture.findOneOrFail(lectureId);
 
-  const alarm = await User.findOne(user);
+  let user = await User.findOne(userId, { relations: ["lectures"] });
 
-  if (alarm) {
-    alarm.lectures = [...alarm.lectures, lecture];
-    const updatedUser = await alarm.save();
-    res.send(updatedUser);
+  if (user) {
+    const duplicatedLecture = user.lectures.find(
+      lecture => lecture.id === lectureId
+    );
+    if (!duplicatedLecture) user.lectures.push(lecture);
+    user = await user.save();
   } else {
-    const newUser = await User.create({ user, lectures: [lecture] }).save();
-    res.send(newUser);
+    user = await User.create({ id: userId, lectures: [lecture] }).save();
   }
+
+  res.send(user.lectures);
+};
+
+export const deleteUserAlarm = async (
+  { params: { userId, lectureId } }: Request,
+  res: Response
+): Promise<void> => {
+  let user = await User.findOne(userId, { relations: ["lectures"] });
+
+  if (user) {
+    user.lectures = user.lectures.filter(lecture => lecture.id !== lectureId);
+    user = await user.save();
+  } else {
+    user = await User.create({ id: userId, lectures: [] }).save();
+  }
+
+  res.send(user.lectures);
 };

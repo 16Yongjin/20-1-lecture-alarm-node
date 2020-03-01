@@ -18,5 +18,5 @@ export class Lecture extends BaseEntity {
   time: string;
 
   @Column()
-  course_id: string;
+  courseId: string;
 }

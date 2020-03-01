@@ -6,11 +6,8 @@ export const checkLectureParams = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.query.course_id) {
-    throw new HTTP400Error("Missing course_id parameter");
-  } else {
-    next();
-  }
+  if (!req.query.courseId) throw new HTTP400Error("Missing courseId parameter");
+  else next();
 };
 
 export const checkFindUserParams = (
@@ -18,9 +15,26 @@ export const checkFindUserParams = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.query.id) {
-    throw new HTTP400Error("Missing id parameter");
-  } else {
-    next();
-  }
+  if (!req.query.id) throw new HTTP400Error("Missing id parameter");
+  else next();
+};
+
+export const checkAddUserAlarmBody = async (
+  { body: { userId, lectureId } }: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  if (!userId || !lectureId)
+    throw new HTTP400Error("Missing userId orlectureId");
+  else next();
+};
+
+export const checkDeleteUserAlarmBody = async (
+  { params: { userId, lectureId } }: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  if (!userId || !lectureId)
+    throw new HTTP400Error("Missing userId orlectureId");
+  else next();
 };

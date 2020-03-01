@@ -7,6 +7,7 @@
     "postinstall": "npx tsc",
     "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
     "test": "jest",
+    "test-dev": "jest --watch",
     "start": "npx pm2 start pm2.yaml --env production"
   },
   "keywords": [],
@@ -46,7 +47,7 @@
     "typeorm": "^0.2.24"
   },
   "jest": {
-    "verbose": false,
+    "verbose": true,
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
@@ -58,6 +59,9 @@
       "jsx",
       "json",
       "node"
+    ],
+    "testPathIgnorePatterns": [
+      "dist"
     ]
   }
 }
