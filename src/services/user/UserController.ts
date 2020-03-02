@@ -7,10 +7,7 @@ export const findUserAlarm = async (
 ): Promise<void> => {
   let user = await User.findOne({ where: { id }, relations: ["lectures"] });
 
-  if (!user) {
-    user = await User.create({ id, lectures: [] }).save();
-    console.log("user created", user);
-  }
+  if (!user) user = await User.create({ id, lectures: [] }).save();
 
   res.send(user.lectures);
 };
@@ -24,9 +21,7 @@ export const addUserAlarm = async (
   let user = await User.findOne(userId, { relations: ["lectures"] });
 
   if (user) {
-    const duplicatedLecture = user.lectures.find(
-      lecture => lecture.id === lectureId
-    );
+    const duplicatedLecture = user.lectures.find(({ id }) => id === lectureId);
     if (!duplicatedLecture) user.lectures.push(lecture);
     user = await user.save();
   } else {

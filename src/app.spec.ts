@@ -121,3 +121,12 @@ describe("User Service", () => {
     });
   });
 });
+
+describe("Alarm Service", () => {
+  describe("유저가 등록한 강의가 비었는지 확인", () => {
+    it.only("모든 유저", async () => {
+      const response = await request(router).get("/checkLectures");
+      expect(response.status).toEqual(200);
+    });
+  });
+});

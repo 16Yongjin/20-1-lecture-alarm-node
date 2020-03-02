@@ -17,7 +17,10 @@ export class User extends BaseEntity {
   @PrimaryColumn("text")
   id: string;
 
-  @ManyToMany(() => Lecture)
+  @ManyToMany(
+    () => Lecture,
+    lecture => lecture.users
+  )
   @JoinTable()
   lectures: Lecture[];
 }

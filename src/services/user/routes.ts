@@ -2,7 +2,6 @@ import {
   checkAddUserAlarmBody,
   checkDeleteUserAlarmBody
 } from "./../../middleware/checks";
-import { Request, Response } from "express";
 import { findUserAlarm, addUserAlarm, deleteUserAlarm } from "./UserController";
 
 export default [
