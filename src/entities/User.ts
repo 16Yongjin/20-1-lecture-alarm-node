@@ -23,4 +23,20 @@ export class User extends BaseEntity {
   )
   @JoinTable()
   lectures: Lecture[];
+
+  sendAlarm(lectureId: string) {
+    const lecture = this.lectures.find(({ id }) => id === lectureId);
+
+    if (!lecture) return;
+
+    console.log({
+      to: this.id,
+      message: `${lecture.name} ${lecture.professor} ${lecture.time} 자리났어요.`
+    });
+  }
+
+  removeLecture(lectureId: string) {
+    this.lectures = this.lectures.filter(({ id }) => id !== lectureId);
+    return this.save();
+  }
 }

@@ -122,10 +122,17 @@ describe("User Service", () => {
   });
 });
 
-describe("Alarm Service", () => {
-  describe("유저가 등록한 강의가 비었는지 확인", () => {
-    it.only("모든 유저", async () => {
-      const response = await request(router).get("/checkLectures");
+describe("Admin Service", () => {
+  describe("/admin/users", () => {
+    it.only("모든 유저 가져옴", async () => {
+      const response = await request(router).get("/admin/users");
+      expect(response.status).toEqual(200);
+    });
+  });
+
+  describe("/admin/alarms", () => {
+    it.only("알람으로 등록된 모든 강의 가져옴", async () => {
+      const response = await request(router).get("/admin/alarms");
       expect(response.status).toEqual(200);
     });
   });

@@ -1,3 +1,5 @@
+import { chain } from "lodash";
+import { Lecture } from "./../../../entities/Lecture";
 import request from "request-promise";
 import cheerio from "cheerio";
 
@@ -5,7 +7,7 @@ import cheerio from "cheerio";
 
 // dotenv.config();
 
-type Lecture = {
+type FetchedLecture = {
   index: number;
   id: string;
   name: string;
@@ -46,13 +48,15 @@ function isEmpty(people: string): boolean {
   }
 }
 
-export const getLectures = async (courseId: string): Promise<Lecture[]> => {
+export const getLectures = async (
+  courseId: string
+): Promise<FetchedLecture[]> => {
   const html = await fetchCourseHtml(courseId);
   const $ = cheerio.load(html);
 
   const trs = $("#premier1 tr");
 
-  const lectures: Lecture[] = $(trs)
+  const lectures: FetchedLecture[] = $(trs)
     .map((index, tr) => {
       if (!index) return;
 
@@ -62,7 +66,7 @@ export const getLectures = async (courseId: string): Promise<Lecture[]> => {
         trim(tds.eq(i).text())
       );
 
-      const lecture: Lecture = {
+      const lecture: FetchedLecture = {
         index: index - 1,
         courseId,
         id,
@@ -77,4 +81,15 @@ export const getLectures = async (courseId: string): Promise<Lecture[]> => {
     .get();
 
   return lectures;
+};
+
+export const filterLectures = async (
+  courseId: string,
+  lectures: Lecture[]
+): Promise<Lecture[]> => {
+  const fetchedLectures = await getLectures(courseId).catch(() => []);
+
+  if (!fetchedLectures) return [];
+
+  return lectures.filter(lecture => fetchedLectures[lecture.index]?.isEmpty);
 };

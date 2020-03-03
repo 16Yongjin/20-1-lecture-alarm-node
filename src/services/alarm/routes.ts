@@ -1,9 +1,9 @@
-import { checkLectures } from "./AlarmController";
+import { checkLecturesHandler } from "./AlarmController";
 
 export default [
   {
     path: "/checkLectures",
     method: "get",
-    handler: checkLectures
+    handler: checkLecturesHandler
   }
 ];

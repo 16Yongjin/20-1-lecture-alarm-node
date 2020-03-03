@@ -1,39 +1,37 @@
+import { sendFcm } from "./../../utils/fcmSender";
 import { Request, Response } from "express";
-import { getLectures } from "./../lecture/providers/LectureProvider";
-import { User, Lecture } from "../../entities";
-import { map, flatten, uniqBy, chain, pick } from "lodash";
+import { filterLectures } from "./../lecture/providers/LectureProvider";
+import { Lecture } from "../../entities";
+import { chain, map } from "lodash";
 
-export const checkLectures = async (
+export const checkLectures = async (): Promise<void> => {
+  const lectures = await Lecture.find({
+    relations: ["users", "users.lectures"],
+    join: { alias: "lectures", innerJoin: { users: "lectures.users" } }
+  });
+
+  const grouped = chain(lectures)
+    .groupBy("courseId")
+    .entries()
+    .value();
+
+  grouped.forEach(async ([courseId, lectures]) => {
+    const filteredLectures = await filterLectures(courseId, lectures);
+
+    filteredLectures.forEach(({ id, users, name, professor, time }) => {
+      sendFcm(map(users, "id"), `${name} ${professor} ${time} 자리났어요.`)
+        .then(console.log)
+        .then(() => users.forEach(user => user.removeLecture(id)))
+        .catch(console.log);
+    });
+  });
+};
+
+export const checkLecturesHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   res.send("ok");
 
-  let users = await User.find({ relations: ["lectures"] });
-
-  chain(users)
-    .map("lectures")
-    .flatten()
-    .uniqBy(({ id }) => id)
-    .groupBy(({ courseId }) => courseId)
-    .entries()
-    .forEach(async ([courseId, lectures]) => {
-      const fetchedLectures = await getLectures(courseId);
-
-      lectures
-        .filter(lecture => fetchedLectures[lecture.index].isEmpty)
-        .forEach(async ({ id, name, professor, time }) => {
-          const users = await Lecture.findOne(id, {
-            relations: ["users"]
-          }).then(l => l?.users || []);
-
-          users.forEach(user => {
-            console.log({
-              to: user.id,
-              message: `${name} ${professor} ${time} 자리났어요.`
-            });
-          });
-        });
-    })
-    .value();
+  checkLectures();
 };
