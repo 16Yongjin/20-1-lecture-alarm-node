@@ -1,4 +1,3 @@
-import { chain } from "lodash";
 import { Lecture } from "./../../../entities/Lecture";
 import request from "request-promise";
 import cheerio from "cheerio";

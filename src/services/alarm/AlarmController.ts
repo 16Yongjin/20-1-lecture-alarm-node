@@ -1,8 +1,9 @@
-import { sendFcm } from "./../../utils/fcmSender";
 import { Request, Response } from "express";
+import { chain, map } from "lodash";
+import { logger, alarmLogger } from "./../../utils/logger";
+import { sendFcm } from "./../../utils/fcmSender";
 import { filterLectures } from "./../lecture/providers/LectureProvider";
 import { Lecture } from "../../entities";
-import { chain, map } from "lodash";
 
 export const checkLectures = async (): Promise<void> => {
   const lectures = await Lecture.find({
@@ -19,10 +20,11 @@ export const checkLectures = async (): Promise<void> => {
     const filteredLectures = await filterLectures(courseId, lectures);
 
     filteredLectures.forEach(({ id, users, name, professor, time }) => {
+      alarmLogger.info(`${name} ${professor} ${time} | ${users.length}`);
       sendFcm(map(users, "id"), `${name} ${professor} ${time} 자리났어요.`)
         .then(console.log)
         .then(() => users.forEach(user => user.removeLecture(id)))
-        .catch(console.log);
+        .catch(logger.error);
     });
   });
 };
