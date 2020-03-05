@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { User, Lecture } from "../../entities";
+import { HTTP400Error } from "./../../utils/httpErrors";
 
 export const findUserAlarm = async (
   { params: { id } }: Request,
@@ -14,9 +15,12 @@ export const findUserAlarm = async (
 
 export const addUserAlarm = async (
   { body: { userId, lectureId } }: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-  const lecture = await Lecture.findOneOrFail(lectureId);
+  const lecture = await Lecture.findOne(lectureId);
+
+  if (!lecture) return next(new HTTP400Error("존재하지 않는 강의입니다."));
 
   let user = await User.findOne(userId, { relations: ["lectures"] });
 

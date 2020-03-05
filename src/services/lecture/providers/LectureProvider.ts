@@ -1,10 +1,7 @@
-import { Lecture } from "./../../../entities/Lecture";
 import request from "request-promise";
 import cheerio from "cheerio";
-
-// import dotenv from "dotenv";
-
-// dotenv.config();
+import { logger } from "./../../../utils/logger";
+import { Lecture } from "./../../../entities/Lecture";
 
 type FetchedLecture = {
   index: number;
@@ -52,7 +49,6 @@ export const getLectures = async (
 ): Promise<FetchedLecture[]> => {
   const html = await fetchCourseHtml(courseId);
   const $ = cheerio.load(html);
-
   const trs = $("#premier1 tr");
 
   const lectures: FetchedLecture[] = $(trs)
@@ -86,7 +82,14 @@ export const filterLectures = async (
   courseId: string,
   lectures: Lecture[]
 ): Promise<Lecture[]> => {
-  const fetchedLectures = await getLectures(courseId).catch(() => []);
+  console.time(`fetch ${courseId}`);
+
+  const fetchedLectures = await getLectures(courseId).catch((e: Error) => {
+    logger.error(`[Feching Lecture Error] courseId: ${courseId}, ${e.message}`);
+    return [];
+  });
+
+  console.timeEnd(`fetch ${courseId}`);
 
   if (!fetchedLectures) return [];
 

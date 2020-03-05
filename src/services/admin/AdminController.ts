@@ -3,9 +3,9 @@ import { CronJob } from "cron";
 import { User, Lecture } from "../../entities";
 import { checkLectures } from "../alarm/AlarmController";
 
-// '*/3 * 10-17 * * *'
+// '*/3 * 10-16 * * *'
 const alarmJob = new CronJob({
-  cronTime: "*/3 * 10-17 * * *",
+  cronTime: "*/3 * 10-16 * * *",
   onTick: () => {
     console.log("alarm start");
     checkLectures();

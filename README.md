@@ -6,7 +6,7 @@
 
 - Language: Typescript
 - Runtime: Node.js
-- Database: Postgresql
+- Database: PostgreSQL
 - Server: Express
 - ORM: TypeORM
 - Architecture Design Tool: Pen and Paper

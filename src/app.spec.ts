@@ -97,6 +97,17 @@ describe("User Service", () => {
       expect(response2.status).toEqual(200);
       expect(response2.body).toHaveLength(1);
     });
+
+    it("존재하지 않는 강의 등록 시 400 에러", async () => {
+      const response = await request(router)
+        .post("/users")
+        .send({
+          userId: "100",
+          lectureId: "INVALID"
+        });
+
+      expect(response.status).toEqual(400);
+    });
   });
 
   describe("DELETE /users/:userId/:lectureId", () => {
@@ -124,14 +135,14 @@ describe("User Service", () => {
 
 describe("Admin Service", () => {
   describe("/admin/users", () => {
-    it.only("모든 유저 가져옴", async () => {
+    it("모든 유저 가져옴", async () => {
       const response = await request(router).get("/admin/users");
       expect(response.status).toEqual(200);
     });
   });
 
   describe("/admin/alarms", () => {
-    it.only("알람으로 등록된 모든 강의 가져옴", async () => {
+    it("알람으로 등록된 모든 강의 가져옴", async () => {
       const response = await request(router).get("/admin/alarms");
       expect(response.status).toEqual(200);
     });
