@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { CronJob } from "cron";
 import { User, Lecture } from "../../entities";
 import { checkLectures } from "../alarm/AlarmController";
+import { readFile as readFileCb } from "fs";
+import { promisify } from "util";
+
+const readFile = promisify(readFileCb);
 
 // '*/3 * 10-16 * * *'
 export const alarmJob = new CronJob({
@@ -38,4 +42,25 @@ export const findAlarms = async (
   });
 
   res.send(lectures);
+};
+
+export const findLogs = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const logFile = await readFile("combined.log");
+    res.send(logFile);
+  } catch {
+    res.send("error loading log file");
+  }
+};
+
+export const findErrors = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const errorFile = await readFile("error.log");
+    res.send(errorFile);
+  } catch {
+    res.send("error loading error file");
+  }
 };

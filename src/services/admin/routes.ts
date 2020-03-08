@@ -1,4 +1,11 @@
-import { findUsers, findAlarms, startCron, stopCron } from "./AdminController";
+import {
+  findUsers,
+  findAlarms,
+  startCron,
+  stopCron,
+  findLogs,
+  findErrors
+} from "./AdminController";
 
 export default [
   {
@@ -20,5 +27,15 @@ export default [
     path: "/admin/stopCron",
     method: "get",
     handler: stopCron
+  },
+  {
+    path: "/admin/logs",
+    method: "get",
+    handler: findLogs
+  },
+  {
+    path: "/admin/errors",
+    method: "get",
+    handler: findErrors
   }
 ];
