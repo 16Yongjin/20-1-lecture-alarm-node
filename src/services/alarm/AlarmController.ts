@@ -21,7 +21,7 @@ export const checkLectures = async (): Promise<void> => {
 
     filteredLectures.forEach(({ id, users, name, professor, time }) => {
       alarmLogger.info(`${name} ${professor} ${time} | ${users.length}`);
-      sendFcm(map(users, "id"), `${name} ${professor} ${time} 자리났어요.`)
+      sendFcm(map(users, "id"), `${name} / ${professor} / ${time} 자리났어요.`)
         .then(console.log)
         .then(() => users.forEach(user => user.removeLecture(id)))
         .catch(logger.error);

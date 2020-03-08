@@ -4,7 +4,7 @@ import { User, Lecture } from "../../entities";
 import { checkLectures } from "../alarm/AlarmController";
 
 // '*/3 * 10-16 * * *'
-const alarmJob = new CronJob({
+export const alarmJob = new CronJob({
   cronTime: "*/3 * 10-16 * * *",
   onTick: () => {
     console.log("alarm start");
@@ -12,8 +12,6 @@ const alarmJob = new CronJob({
   },
   timeZone: "Asia/Seoul"
 });
-
-alarmJob.start();
 
 export const startCron = async (req: Request, res: Response): Promise<void> => {
   alarmJob.start();

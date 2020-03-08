@@ -15,7 +15,7 @@ export const checkFindUserParams = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.query.id) throw new HTTP400Error("Missing id parameter");
+  if (!req.query.id) next(new HTTP400Error("Missing id parameter"));
   else next();
 };
 
@@ -24,8 +24,11 @@ export const checkAddUserAlarmBody = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
+  console.log("UserId", userId);
+  console.log("lectureId", lectureId);
+
   if (!userId || !lectureId)
-    throw new HTTP400Error("Missing userId orlectureId");
+    next(new HTTP400Error("Missing userId or lectureId"));
   else next();
 };
 
@@ -35,6 +38,6 @@ export const checkDeleteUserAlarmBody = async (
   next: NextFunction
 ): Promise<void> => {
   if (!userId || !lectureId)
-    throw new HTTP400Error("Missing userId orlectureId");
+    next(new HTTP400Error("Missing userId or lectureId"));
   else next();
 };

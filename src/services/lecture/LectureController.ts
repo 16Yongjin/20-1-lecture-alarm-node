@@ -1,8 +1,8 @@
+import { courses } from "./providers/courses";
 import { Request, Response } from "express";
 import { Lecture } from "./../../entities";
 import { getLectures } from "./providers/LectureProvider";
-import { chunk, flatten } from "lodash";
-import { courseIds } from "./providers/data";
+import { chunk, flatten, values, chain } from "lodash";
 
 export const findLectures = async (
   { params: { courseId } }: Request,
@@ -17,12 +17,20 @@ export const storeLectures = async (
   res: Response
 ): Promise<void> => {
   const count = await Lecture.count();
-  if (count >= 2122) {
+  if (count >= 4185) {
     res.send("already stored lectures");
     return;
   }
 
-  for (const courses of chunk(courseIds, 10)) {
+  const courseIds = chain(courses)
+    .values()
+    .flatten()
+    .map(1)
+    .value();
+
+  const skip = req.query.skip || 0;
+
+  for (const courses of chunk(courseIds.slice(skip), 10)) {
     console.log(`fething : ${courses.join(", ")}`);
 
     const lectures = flatten(await Promise.all(courses.map(getLectures)));

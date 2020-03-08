@@ -1,3 +1,4 @@
+import { alarmJob } from "./services/admin/AdminController";
 import "dotenv/config";
 import "reflect-metadata";
 import { logger } from "./utils/logger";
@@ -24,6 +25,8 @@ const main = async () => {
   app.listen(PORT, () =>
     console.log(`Server is running http://localhost:${PORT}`)
   );
+
+  // alarmJob.start();
 };
 
 main();

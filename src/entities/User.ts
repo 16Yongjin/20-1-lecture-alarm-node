@@ -35,7 +35,8 @@ export class User extends BaseEntity {
     });
   }
 
-  removeLecture(lectureId: string) {
+  async removeLecture(lectureId: string) {
+    await this.reload();
     this.lectures = this.lectures.filter(({ id }) => id !== lectureId);
     return this.save();
   }
