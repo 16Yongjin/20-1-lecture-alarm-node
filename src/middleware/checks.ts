@@ -6,7 +6,17 @@ export const checkLectureParams = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.query.courseId) throw new HTTP400Error("Missing courseId parameter");
+  if (!req.query.courseId) next(new HTTP400Error("Missing courseId parameter"));
+  else next();
+};
+
+export const checkLectureSearchParams = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.query.name)
+    next(new HTTP400Error("검색할 강의 이름을 입력해주세요."));
   else next();
 };
 

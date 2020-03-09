@@ -3,12 +3,24 @@ import { Request, Response } from "express";
 import { Lecture } from "./../../entities";
 import { getLectures } from "./providers/LectureProvider";
 import { chunk, flatten, values, chain } from "lodash";
+import { Raw } from "typeorm";
 
 export const findLectures = async (
   { params: { courseId } }: Request,
   res: Response
 ): Promise<void> => {
   const lectures = await Lecture.find({ where: { courseId } });
+  res.send(lectures);
+};
+
+export const searchLectures = async (
+  { query: { name } }: Request,
+  res: Response
+): Promise<void> => {
+  const lectures = await Lecture.find({
+    where: { name: Raw(alias => `${alias} ILIKE '%${name}%'`) },
+    take: 30
+  });
   res.send(lectures);
 };
 

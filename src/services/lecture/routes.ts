@@ -1,6 +1,16 @@
-import { findLectures, storeLectures } from "./LectureController";
+import {
+  findLectures,
+  storeLectures,
+  searchLectures
+} from "./LectureController";
+import { checkLectureSearchParams } from "./../../middleware/checks";
 
 export default [
+  {
+    path: "/lectures/search",
+    method: "get",
+    handler: [checkLectureSearchParams, searchLectures]
+  },
   {
     path: "/lectures/:courseId",
     method: "get",

@@ -15,5 +15,5 @@
 ## Roadmap
 
 - [x] Scalable Architecture
-- [ ] One Command Deployment
+- [x] One Command Deployment
 - [ ] API Documentation

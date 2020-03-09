@@ -23,11 +23,21 @@ afterAll(async () => {
 });
 
 describe("Lecture Service", () => {
-  describe("GET /lectures/courseId", () => {
+  describe("GET /lectures/:courseId", () => {
     it("코스명 ATMB3_H1 강의들 가져오기", async () => {
       const response = await request(router).get("/lectures/ATMB3_H1");
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(1);
+    });
+  });
+
+  describe("GET /lectures/search", () => {
+    it.only("컴퓨터가 들어가는 강의 검색하기", async () => {
+      const response = await request(router).get(
+        `/lectures/search?name=${encodeURIComponent("컴퓨터")}`
+      );
+      expect(response.status).toEqual(200);
+      expect(response.body).toHaveLength(2);
     });
   });
 });
