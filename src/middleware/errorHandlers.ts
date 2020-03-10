@@ -9,7 +9,7 @@ const handle404Error = (router: Router) => {
 
 const handleClientError = (router: Router) => {
   router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    ErrorHandler.clientError(err, res, next);
+    ErrorHandler.clientError(err, req, res, next);
   });
 };
 

@@ -47,7 +47,7 @@ export const findAlarms = async (
 export const findLogs = async (req: Request, res: Response): Promise<void> => {
   try {
     const logFile = await readFile("combined.log");
-    res.send(logFile);
+    res.send(`<pre>${logFile.toString()}</pre>`);
   } catch {
     res.send("error loading log file");
   }
@@ -59,7 +59,7 @@ export const findErrors = async (
 ): Promise<void> => {
   try {
     const errorFile = await readFile("error.log");
-    res.send(errorFile);
+    res.send(`<pre>${errorFile.toString()}</pre>`);
   } catch {
     res.send("error loading error file");
   }
