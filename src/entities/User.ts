@@ -36,7 +36,13 @@ export class User extends BaseEntity {
   }
 
   async removeLecture(lectureId: string) {
-    this.lectures = this.lectures.filter(({ id }) => id !== lectureId);
-    return this.save();
+    const user = await User.findOne(
+      { id: this.id },
+      { relations: ["lectures"] }
+    );
+    if (user) {
+      user.lectures = user.lectures.filter(({ id }) => id !== lectureId);
+      return user.save();
+    }
   }
 }
