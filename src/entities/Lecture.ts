@@ -1,12 +1,5 @@
 import { User } from "./User";
-import {
-  Entity,
-  Column,
-  PrimaryColumn,
-  BaseEntity,
-  ManyToMany,
-  JoinTable
-} from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, ManyToMany } from "typeorm";
 
 @Entity()
 export class Lecture extends BaseEntity {

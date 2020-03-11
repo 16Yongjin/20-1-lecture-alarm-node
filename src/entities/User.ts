@@ -2,12 +2,7 @@ import { Lecture } from ".";
 import {
   Entity,
   BaseEntity,
-  OneToOne,
-  Column,
-  PrimaryGeneratedColumn,
-  JoinColumn,
   PrimaryColumn,
-  OneToMany,
   ManyToMany,
   JoinTable
 } from "typeorm";

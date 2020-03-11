@@ -18,7 +18,10 @@ export const searchLectures = async (
   res: Response
 ): Promise<void> => {
   const lectures = await Lecture.find({
-    where: { name: Raw(alias => `${alias} ILIKE '%${name}%'`) },
+    where: [
+      { name: Raw(alias => `${alias} ILIKE '%${name}%'`) },
+      { professor: Raw(alias => `${alias} ILIKE '%${name}%'`) }
+    ],
     take: 30
   });
   res.send(lectures);
