@@ -35,14 +35,10 @@ export class User extends BaseEntity {
     });
   }
 
-  async removeLecture(lectureId: string) {
-    const user = await User.findOne(
-      { id: this.id },
-      { relations: ["lectures"] }
-    );
-    if (user) {
-      user.lectures = user.lectures.filter(({ id }) => id !== lectureId);
-      return user.save();
-    }
+  removeLecture(lectureId: string) {
+    return User.createQueryBuilder()
+      .relation(User, "lectures")
+      .of({ id: this.id })
+      .remove(lectureId);
   }
 }
