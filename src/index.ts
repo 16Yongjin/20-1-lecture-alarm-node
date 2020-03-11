@@ -6,11 +6,13 @@ import createDatabaseConnection from "./database/connect";
 import initializeApp from "./app";
 
 process.on("uncaughtException", e => {
+  console.error(e);
   logger.error(`Closeing server : ${e.message}`);
   process.exit(1);
 });
 
 process.on("unhandledRejection", e => {
+  console.error(e);
   logger.error(`Closeing server : ${e}`);
   process.exit(1);
 });
