@@ -2,7 +2,7 @@ import { courses } from "./providers/courses";
 import { Request, Response } from "express";
 import { Lecture } from "./../../entities";
 import { getLectures } from "./providers/LectureProvider";
-import { chunk, flatten, values, chain } from "lodash";
+import { chunk, flatten, chain } from "lodash";
 import { Raw } from "typeorm";
 
 export const findLectures = async (

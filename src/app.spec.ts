@@ -39,6 +39,14 @@ describe("Lecture Service", () => {
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(2);
     });
+
+    it.only("이민나 교수님 강의 검색하기", async () => {
+      const response = await request(router).get(
+        `/lectures/search?name=${encodeURIComponent("이민나")}`
+      );
+      expect(response.status).toEqual(200);
+      expect(response.body).toHaveLength(1);
+    });
   });
 });
 
