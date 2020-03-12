@@ -64,3 +64,15 @@ export const findErrors = async (
     res.send("error loading error file");
   }
 };
+
+export const findFinishedAlarms = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const alarmFile = await readFile("alarm.log");
+    res.send(`<pre>${alarmFile.toString()}</pre>`);
+  } catch {
+    res.send("error loading alarm file");
+  }
+};
