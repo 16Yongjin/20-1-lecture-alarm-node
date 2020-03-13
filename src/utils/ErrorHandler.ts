@@ -13,7 +13,6 @@ export const clientError = (
   next: NextFunction
 ) => {
   if (err instanceof HTTPClientError) {
-    console.warn(err);
     logger.error(
       `[HTTP Client Error] ${err.statusCode} ${err.message} ${req.originalUrl}`
     );

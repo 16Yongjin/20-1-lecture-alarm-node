@@ -4,6 +4,7 @@ import cors from "cors";
 import parser from "body-parser";
 import compression from "compression";
 import morgan from "morgan";
+import monitor from "express-status-monitor";
 
 export const handleCors = (router: Router) =>
   router.use(cors({ credentials: true, origin: true }));
@@ -28,4 +29,8 @@ export const handleLogging = (router: Router) => {
       stream: logStream
     })
   );
+};
+
+export const handleMonitor = (router: Router) => {
+  router.use(monitor());
 };
