@@ -32,5 +32,5 @@ export const handleLogging = (router: Router) => {
 };
 
 export const handleMonitor = (router: Router) => {
-  router.use(monitor());
+  // router.use(monitor());
 };

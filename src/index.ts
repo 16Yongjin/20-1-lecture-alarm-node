@@ -5,7 +5,7 @@ import http from "http";
 import { logger } from "./utils/logger";
 import createDatabaseConnection from "./database/connect";
 import initializeApp from "./app";
-import { handleSocketIO } from "./middleware/socket";
+import { io } from "./socket";
 
 process.on("uncaughtException", e => {
   console.error(e);
@@ -28,13 +28,13 @@ const main = async () => {
 
   const server = http.createServer(app);
 
+  io.listen(server);
+
   server.listen(PORT, () =>
     console.log(`Server is running http://localhost:${PORT}`)
   );
 
-  handleSocketIO(server);
-
-  // alarmJob.start();
+  alarmJob.start();
 };
 
 main();

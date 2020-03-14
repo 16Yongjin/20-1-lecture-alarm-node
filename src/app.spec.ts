@@ -1,3 +1,4 @@
+import { Server } from "socket.io";
 import "dotenv/config";
 import "reflect-metadata";
 import request from "supertest";
@@ -10,6 +11,7 @@ import createTestData from "./database/createTestData";
 
 let router: Router;
 let connection: Connection;
+let io: Server;
 
 beforeAll(async () => {
   connection = await createTestDatabaseConnection();

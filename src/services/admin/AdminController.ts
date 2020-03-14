@@ -105,6 +105,8 @@ export const sendAlarmLogViewer = async (
 
 export const logStream = async (io: Server): Promise<void> => {
   io.on("connection", (socket: Socket) => {
+    console.log("socket connected!!");
+
     const logListener = (info: any) => {
       socket.emit("log", JSON.stringify(info));
     };
