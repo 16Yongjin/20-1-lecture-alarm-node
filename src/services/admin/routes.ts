@@ -5,9 +5,10 @@ import {
   stopCron,
   findLogs,
   findErrors,
-  findFinishedAlarms,
+  findCompletedAlarms,
   sendLogViewer,
-  sendAlarmLogViewer
+  sendAlarmLogViewer,
+  getDashboardData
 } from "./AdminController";
 
 export default [
@@ -42,9 +43,9 @@ export default [
     handler: findErrors
   },
   {
-    path: "/admin/finishedAlarms",
+    path: "/admin/completedAlarms",
     method: "get",
-    handler: findFinishedAlarms
+    handler: findCompletedAlarms
   },
   {
     path: "/admin/logViewer",
@@ -55,5 +56,10 @@ export default [
     path: "/admin/alarmLogViewer",
     method: "get",
     handler: sendAlarmLogViewer
+  },
+  {
+    path: "/admin/dashboardData",
+    method: "get",
+    handler: getDashboardData
   }
 ];

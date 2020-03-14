@@ -30,20 +30,27 @@ export const stopCron = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const findUsers = async (req: Request, res: Response): Promise<void> => {
-  const users = await User.find({ relations: ["lectures"] });
-  res.send(users);
+  try {
+    const users = await User.find({ relations: ["lectures"] });
+    res.send(users);
+  } catch {
+    res.send(500);
+  }
 };
 
 export const findAlarms = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const lectures = await Lecture.find({
-    relations: ["users"],
-    join: { alias: "lectures", innerJoin: { users: "lectures.users" } }
-  });
-
-  res.send(lectures);
+  try {
+    const lectures = await Lecture.find({
+      relations: ["users"],
+      join: { alias: "lectures", innerJoin: { users: "lectures.users" } }
+    });
+    res.send(lectures);
+  } catch {
+    res.send(500);
+  }
 };
 
 export const findLogs = async (req: Request, res: Response): Promise<void> => {
@@ -67,7 +74,7 @@ export const findErrors = async (
   }
 };
 
-export const findFinishedAlarms = async (
+export const findCompletedAlarms = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -76,6 +83,24 @@ export const findFinishedAlarms = async (
     res.send(`<pre>${alarmFile.toString()}</pre>`);
   } catch {
     res.send("error loading alarm file");
+  }
+};
+
+export const getDashboardData = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const users = await User.find({ relations: ["lectures"] });
+    const alarms = await Lecture.find({
+      relations: ["users"],
+      join: { alias: "lectures", innerJoin: { users: "lectures.users" } }
+    });
+    const completedAlarms = await readFile("alarm.log");
+
+    res.send({ users, alarms, completedAlarms });
+  } catch {
+    res.sendStatus(500);
   }
 };
 
