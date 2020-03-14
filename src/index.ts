@@ -1,4 +1,3 @@
-import { alarmJob } from "./services/admin/AdminController";
 import "dotenv/config";
 import "reflect-metadata";
 import http from "http";
@@ -6,6 +5,7 @@ import { logger } from "./utils/logger";
 import createDatabaseConnection from "./database/connect";
 import initializeApp from "./app";
 import { io } from "./socket";
+import { alarmJob } from "./services/admin/AdminController";
 
 process.on("uncaughtException", e => {
   console.error(e);
