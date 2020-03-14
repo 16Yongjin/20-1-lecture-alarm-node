@@ -4,6 +4,8 @@ import { User, Lecture } from "../../entities";
 import { checkLectures } from "../alarm/AlarmController";
 import { readFile as readFileCb } from "fs";
 import { promisify } from "util";
+import { Server, Socket } from "socket.io";
+import { logger, alarmLogger } from "../../utils/logger";
 
 const readFile = promisify(readFileCb);
 
@@ -75,4 +77,48 @@ export const findFinishedAlarms = async (
   } catch {
     res.send("error loading alarm file");
   }
+};
+
+export const sendLogViewer = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const logViewer = await readFile("log.html");
+    res.send(logViewer.toString());
+  } catch {
+    res.send("error loading log.html file");
+  }
+};
+
+export const sendAlarmLogViewer = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const alarmLogViewer = await readFile("alarmLog.html");
+    res.send(alarmLogViewer.toString());
+  } catch {
+    res.send("error loading alarmLog.html file");
+  }
+};
+
+export const logStream = async (io: Server): Promise<void> => {
+  io.on("connection", (socket: Socket) => {
+    const logListener = (info: any) => {
+      socket.emit("log", JSON.stringify(info));
+    };
+
+    const alarmLogListener = (info: any) => {
+      socket.emit("alarmLog", JSON.stringify(info));
+    };
+
+    const loggerStream = logger.on("data", logListener);
+    const alarmLoggerStream = alarmLogger.on("data", alarmLogListener);
+
+    socket.on("disconnect", () => {
+      loggerStream.removeListener("data", logListener);
+      alarmLoggerStream.removeListener("data", alarmLogListener);
+    });
+  });
 };

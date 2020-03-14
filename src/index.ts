@@ -1,9 +1,11 @@
 import { alarmJob } from "./services/admin/AdminController";
 import "dotenv/config";
 import "reflect-metadata";
+import http from "http";
 import { logger } from "./utils/logger";
 import createDatabaseConnection from "./database/connect";
 import initializeApp from "./app";
+import { handleSocketIO } from "./middleware/socket";
 
 process.on("uncaughtException", e => {
   console.error(e);
@@ -24,9 +26,13 @@ const main = async () => {
 
   const { PORT = 3000 } = process.env;
 
-  app.listen(PORT, () =>
+  const server = http.createServer(app);
+
+  server.listen(PORT, () =>
     console.log(`Server is running http://localhost:${PORT}`)
   );
+
+  handleSocketIO(server);
 
   // alarmJob.start();
 };

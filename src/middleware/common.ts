@@ -1,10 +1,10 @@
-import { logger } from "./../utils/logger";
 import { Router } from "express";
 import cors from "cors";
 import parser from "body-parser";
 import compression from "compression";
 import morgan from "morgan";
 import monitor from "express-status-monitor";
+import { logger } from "./../utils/logger";
 
 export const handleCors = (router: Router) =>
   router.use(cors({ credentials: true, origin: true }));
