@@ -29,6 +29,13 @@ export const stopCron = async (req: Request, res: Response): Promise<void> => {
   res.send("cron off");
 };
 
+export const getCronStatus = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  res.send(alarmJob.running);
+};
+
 export const findUsers = async (req: Request, res: Response): Promise<void> => {
   const users = await User.find({ relations: ["lectures"] });
   res.send(users);

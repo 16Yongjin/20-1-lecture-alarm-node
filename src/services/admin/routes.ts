@@ -7,7 +7,8 @@ import {
   findErrors,
   findFinishedAlarms,
   sendLogViewer,
-  sendAlarmLogViewer
+  sendAlarmLogViewer,
+  getCronStatus
 } from "./AdminController";
 
 export default [
@@ -30,6 +31,11 @@ export default [
     path: "/admin/stopCron",
     method: "get",
     handler: stopCron
+  },
+  {
+    path: "/admin/cronStatus",
+    method: "get",
+    handler: getCronStatus
   },
   {
     path: "/admin/logs",
