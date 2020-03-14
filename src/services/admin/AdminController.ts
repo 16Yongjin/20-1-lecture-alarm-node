@@ -98,7 +98,11 @@ export const getDashboardData = async (
     });
     const completedAlarms = await readFile("alarm.log");
 
-    res.send({ users, alarms, completedAlarms });
+    res.send({
+      users,
+      alarms,
+      completedAlarms: completedAlarms.toString("utf-8")
+    });
   } catch {
     res.sendStatus(500);
   }
