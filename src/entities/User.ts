@@ -19,21 +19,16 @@ export class User extends BaseEntity {
   @JoinTable()
   lectures: Lecture[];
 
-  sendAlarm(lectureId: string) {
-    const lecture = this.lectures.find(({ id }) => id === lectureId);
+  async removeLecture(lectureId: string) {
+    console.log("remove user alarm");
+    console.log("user", this);
 
-    if (!lecture) return;
-
-    console.log({
-      to: this.id,
-      message: `${lecture.name} ${lecture.professor} ${lecture.time} 자리났어요.`
-    });
-  }
-
-  removeLecture(lectureId: string) {
-    return User.createQueryBuilder()
+    await User.createQueryBuilder()
       .relation(User, "lectures")
       .of({ id: this.id })
       .remove(lectureId);
+
+    const user = User.findOne(this.id);
+    console.log(user);
   }
 }
