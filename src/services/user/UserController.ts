@@ -1,3 +1,4 @@
+import { sendFcm } from "./../../utils/fcmSender";
 import { Request, Response, NextFunction } from "express";
 import { User, Lecture } from "../../entities";
 import { HTTP400Error } from "./../../utils/httpErrors";
@@ -49,4 +50,15 @@ export const deleteUserAlarm = async (
   }
 
   res.send(user.lectures);
+};
+
+export const deprecatedAlarm = async (
+  { body }: Request,
+  res: Response
+): Promise<void> => {
+  if (body.user && body.user.id) {
+    sendFcm([body.user.id], "앱을 최신버전으로 업그레이드 해주세요!!");
+  }
+
+  res.sendStatus(400);
 };

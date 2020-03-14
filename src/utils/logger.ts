@@ -24,5 +24,3 @@ if (process.env.NODE_ENV !== "production") {
 
   alarmLogger.add(new transports.Console({ format: format.simple() }));
 }
-
-alarmLogger.on("data", console.log);

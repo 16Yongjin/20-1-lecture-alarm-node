@@ -34,7 +34,7 @@ const main = async () => {
 
   handleSocketIO(server);
 
-  // alarmJob.start();
+  alarmJob.start();
 };
 
 main();

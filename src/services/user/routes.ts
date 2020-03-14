@@ -2,7 +2,12 @@ import {
   checkAddUserAlarmBody,
   checkDeleteUserAlarmBody
 } from "./../../middleware/checks";
-import { findUserAlarm, addUserAlarm, deleteUserAlarm } from "./UserController";
+import {
+  findUserAlarm,
+  addUserAlarm,
+  deleteUserAlarm,
+  deprecatedAlarm
+} from "./UserController";
 
 export default [
   {
@@ -19,5 +24,10 @@ export default [
     path: "/users/:userId/:lectureId",
     method: "delete",
     handler: [checkDeleteUserAlarmBody, deleteUserAlarm]
+  },
+  {
+    path: "/myalarm",
+    method: "post",
+    handler: deprecatedAlarm
   }
 ];

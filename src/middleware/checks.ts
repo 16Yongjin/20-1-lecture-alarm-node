@@ -34,9 +34,6 @@ export const checkAddUserAlarmBody = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  console.log("UserId", userId);
-  console.log("lectureId", lectureId);
-
   if (!userId || !lectureId)
     next(new HTTP400Error("Missing userId or lectureId"));
   else next();
