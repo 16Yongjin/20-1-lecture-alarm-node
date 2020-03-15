@@ -25,8 +25,8 @@
 
       socket.on("log", info => {
         const { message, level, timestamp } = JSON.parse(info);
-        if (message.includes("GET /admin/")) return;
-        logView.innerHTML += `<div class="${level}">${timestamp} ${level} ${message}</div>`;
+        if (message.startsWith("GET /admin/dashboardData")) return;
+        logView.innerHTML += `<div class="${level}">${timestamp} ${level}: ${message}</div>`;
         scrollDown();
       });
 
