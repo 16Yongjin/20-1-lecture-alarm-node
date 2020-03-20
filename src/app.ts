@@ -9,7 +9,8 @@ import { io } from "./socket";
 const initializeApp = (): Express => {
   const app = express();
 
-  app.use(monitor({ websocket: io }));
+  if (process.env.NODE_ENV === "production")
+    app.use(monitor({ websocket: io }));
 
   applyMiddleware(middleware, app);
   applyRoutes(routes, app);

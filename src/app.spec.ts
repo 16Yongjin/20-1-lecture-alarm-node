@@ -34,7 +34,7 @@ describe("Lecture Service", () => {
   });
 
   describe("GET /lectures/search", () => {
-    it.only("컴퓨터가 들어가는 강의 검색하기", async () => {
+    it("컴퓨터가 들어가는 강의 검색하기", async () => {
       const response = await request(router).get(
         `/lectures/search?name=${encodeURIComponent("컴퓨터")}`
       );
@@ -42,7 +42,7 @@ describe("Lecture Service", () => {
       expect(response.body).toHaveLength(2);
     });
 
-    it.only("이민나 교수님 강의 검색하기", async () => {
+    it("이민나 교수님 강의 검색하기", async () => {
       const response = await request(router).get(
         `/lectures/search?name=${encodeURIComponent("이민나")}`
       );
