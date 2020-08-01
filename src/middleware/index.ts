@@ -3,7 +3,6 @@ import {
   handleBodyRequestParsing,
   handleCompression,
   handleLogging,
-  handleMonitor
 } from "./common";
 
 import { handleAPIDocs } from "./apiDocs";
@@ -13,6 +12,5 @@ export default [
   handleBodyRequestParsing,
   handleCompression,
   handleLogging,
-  handleMonitor,
-  handleAPIDocs
+  handleAPIDocs,
 ];

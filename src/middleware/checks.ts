@@ -48,3 +48,12 @@ export const checkDeleteUserAlarmBody = async (
     next(new HTTP400Error("Missing userId or lectureId"));
   else next();
 };
+
+export const checkAdminAuthBody = async (
+  { body: { id, password } }: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  if (!id || !password) next(new HTTP400Error("Missing id or password"));
+  else next();
+};

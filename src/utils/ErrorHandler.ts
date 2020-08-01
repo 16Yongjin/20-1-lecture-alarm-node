@@ -25,7 +25,9 @@ export const clientError = (
 export const serverError = (err: Error, res: Response, next: NextFunction) => {
   console.error(err);
   logger.error(`[HTTP Server Error] ${err.message}`);
-  if (process.env.NODE_ENV === "production") {
+  if (err.name === "UnauthorizedError") {
+    res.status(401).send("invalid token...");
+  } else if (process.env.NODE_ENV === "production") {
     res.status(500).send("Internal Server Error");
   } else {
     res.status(500).send(err.stack);
