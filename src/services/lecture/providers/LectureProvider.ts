@@ -18,12 +18,12 @@ const url = "https://wis.hufs.ac.kr/src08/jsp/lecture/LECTURE2020L.jsp";
 const buildForm = (courseId: string) => {
   return {
     ag_ledg_year: "2020",
-    ag_ledg_sessn: "1",
+    ag_ledg_sessn: "3",
     ag_org_sect: "A",
     campus_sect: courseId.slice(0, 2),
     gubun: courseId.startsWith("A") ? "1" : "2",
     ag_crs_strct_cd: courseId,
-    ag_compt_fld_cd: courseId
+    ag_compt_fld_cd: courseId,
   };
 };
 
@@ -57,7 +57,7 @@ export const getLectures = async (
 
       const tds = $(tr).children("td");
 
-      const [id, name, professor, time, people] = [3, 4, 11, 14, 15].map(i =>
+      const [id, name, professor, time, people] = [3, 4, 11, 14, 15].map((i) =>
         trim(tds.eq(i).text())
       );
 
@@ -68,7 +68,7 @@ export const getLectures = async (
         name,
         professor,
         time,
-        isEmpty: isEmpty(people)
+        isEmpty: isEmpty(people),
       };
 
       return lecture;
@@ -93,5 +93,5 @@ export const filterLectures = async (
 
   if (!fetchedLectures) return [];
 
-  return lectures.filter(lecture => fetchedLectures[lecture.index]?.isEmpty);
+  return lectures.filter((lecture) => fetchedLectures[lecture.index]?.isEmpty);
 };

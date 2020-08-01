@@ -7,13 +7,13 @@ import initializeApp from "./app";
 import { io } from "./socket";
 import { alarmJob } from "./services/admin/AdminController";
 
-process.on("uncaughtException", e => {
+process.on("uncaughtException", (e) => {
   console.error(e);
   logger.error(`Closeing server : ${e.message}`);
   process.exit(1);
 });
 
-process.on("unhandledRejection", e => {
+process.on("unhandledRejection", (e) => {
   console.error(e);
   logger.error(`Closeing server : ${e}`);
   process.exit(1);
@@ -34,7 +34,7 @@ const main = async () => {
     console.log(`Server is running http://localhost:${PORT}`)
   );
 
-  alarmJob.start();
+  // alarmJob.start();
 };
 
 main();
