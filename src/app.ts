@@ -13,7 +13,7 @@ const initializeApp = (): Express => {
     app.use(monitor({ websocket: io }));
 
   applyMiddleware(middleware, app);
-  applyRoutes(routes, app);
+  applyRoutes(routes, app, "v1");
   applyMiddleware(errorHandlers, app);
 
   return app;

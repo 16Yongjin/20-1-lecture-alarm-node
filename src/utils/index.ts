@@ -20,9 +20,13 @@ type Route = {
   handler: Handler | Handler[];
 };
 
-export const applyRoutes = (routes: Route[], router: Router) => {
+export const applyRoutes = (
+  routes: Route[],
+  router: Router,
+  version: string
+) => {
   for (const route of routes) {
     const { method, path, handler } = route;
-    (router as any)[method](path, handler);
+    (router as any)[method](`/${version}${path}`, handler);
   }
 };
