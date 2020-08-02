@@ -23,13 +23,13 @@
         scrollDown();
       });
 
-      socket.on("alarmLog", info => {
+      socket.on("alarmLog", (info) => {
         const { message, level, timestamp } = JSON.parse(info);
         logView.innerHTML += `<div class="${level}">${timestamp} ${level} ${message}</div>`;
         scrollDown();
       });
 
-      socket.on("error", err => {
+      socket.on("error", (err) => {
         logView.innerHTML += `<div class="error">${err.toString()}</div>`;
         scrollDown();
       });

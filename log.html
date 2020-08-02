@@ -23,14 +23,14 @@
         scrollDown();
       });
 
-      socket.on("log", info => {
+      socket.on("log", (info) => {
         const { message, level, timestamp } = JSON.parse(info);
         if (message.startsWith("GET /admin/dashboardData")) return;
         logView.innerHTML += `<div class="${level}">${timestamp} ${level}: ${message}</div>`;
         scrollDown();
       });
 
-      socket.on("error", err => {
+      socket.on("error", (err) => {
         logView.innerHTML += `<div class="error">${err.toString()}</div>`;
         scrollDown();
       });

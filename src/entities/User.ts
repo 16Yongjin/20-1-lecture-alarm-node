@@ -4,7 +4,7 @@ import {
   BaseEntity,
   PrimaryColumn,
   ManyToMany,
-  JoinTable
+  JoinTable,
 } from "typeorm";
 
 @Entity()
@@ -12,10 +12,7 @@ export class User extends BaseEntity {
   @PrimaryColumn("text")
   id: string;
 
-  @ManyToMany(
-    () => Lecture,
-    lecture => lecture.users
-  )
+  @ManyToMany(() => Lecture, (lecture) => lecture.users)
   @JoinTable()
   lectures: Lecture[];
 

@@ -8,13 +8,10 @@ import { Lecture } from "../../entities";
 export const checkLectures = async (): Promise<void> => {
   const lectures = await Lecture.find({
     relations: ["users", "users.lectures"],
-    join: { alias: "lectures", innerJoin: { users: "lectures.users" } }
+    join: { alias: "lectures", innerJoin: { users: "lectures.users" } },
   });
 
-  const grouped = chain(lectures)
-    .groupBy("courseId")
-    .entries()
-    .value();
+  const grouped = chain(lectures).groupBy("courseId").entries().value();
 
   grouped.forEach(async ([courseId, lectures]) => {
     const filteredLectures = await filterLectures(courseId, lectures);
@@ -22,7 +19,7 @@ export const checkLectures = async (): Promise<void> => {
     filteredLectures.forEach(({ id, users, name, professor, time }) => {
       alarmLogger.info(`${name} ${professor} ${time} | ${users.length}`);
       sendFcm(map(users, "id"), `${name} / ${professor} / ${time} 자리났어요.`)
-        .then(() => users.forEach(user => user.removeLecture(id)))
+        .then(() => users.forEach((user) => user.removeLecture(id)))
         .catch(logger.error);
     });
   });

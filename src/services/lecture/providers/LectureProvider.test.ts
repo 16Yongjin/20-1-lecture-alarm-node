@@ -12,8 +12,8 @@ describe("LectureProvider", () => {
         name: "컴퓨터수학",
         professor: "이민나",
         time: "월 1 2 3",
-        isEmpty: true
-      }
+        isEmpty: true,
+      },
     ];
     expect(result).toEqual(expected);
   });

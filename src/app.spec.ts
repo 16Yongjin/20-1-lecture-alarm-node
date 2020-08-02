@@ -1,6 +1,6 @@
-import { Server } from "socket.io";
 import "dotenv/config";
 import "reflect-metadata";
+import { Server } from "socket.io";
 import request from "supertest";
 import { Router } from "express";
 import { Connection } from "typeorm";
@@ -73,58 +73,48 @@ describe("User Service", () => {
       expect(existingUserRes.status).toEqual(200);
       expect(existingUserRes.body).toHaveLength(2);
 
-      const response = await request(router)
-        .post("/users")
-        .send({
-          userId: "2",
-          lectureId: "V41002101"
-        });
+      const response = await request(router).post("/users").send({
+        userId: "2",
+        lectureId: "V41002101",
+      });
 
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(3);
     });
 
     it("기존에 없던 유저에 알람 추가 ", async () => {
-      const response = await request(router)
-        .post("/users")
-        .send({
-          userId: "100",
-          lectureId: "V41002101"
-        });
+      const response = await request(router).post("/users").send({
+        userId: "100",
+        lectureId: "V41002101",
+      });
 
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(1);
     });
 
     it("이미 추가된 알람은 가볍게 무시", async () => {
-      const response1 = await request(router)
-        .post("/users")
-        .send({
-          userId: "addAgain",
-          lectureId: "V41002101"
-        });
+      const response1 = await request(router).post("/users").send({
+        userId: "addAgain",
+        lectureId: "V41002101",
+      });
 
       expect(response1.status).toEqual(200);
       expect(response1.body).toHaveLength(1);
 
-      const response2 = await request(router)
-        .post("/users")
-        .send({
-          userId: "addAgain",
-          lectureId: "V41002101"
-        });
+      const response2 = await request(router).post("/users").send({
+        userId: "addAgain",
+        lectureId: "V41002101",
+      });
 
       expect(response2.status).toEqual(200);
       expect(response2.body).toHaveLength(1);
     });
 
     it("존재하지 않는 강의 등록 시 400 에러", async () => {
-      const response = await request(router)
-        .post("/users")
-        .send({
-          userId: "100",
-          lectureId: "INVALID"
-        });
+      const response = await request(router).post("/users").send({
+        userId: "100",
+        lectureId: "INVALID",
+      });
 
       expect(response.status).toEqual(400);
     });

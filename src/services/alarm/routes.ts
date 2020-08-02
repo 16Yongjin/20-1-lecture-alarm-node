@@ -4,6 +4,6 @@ export default [
   {
     path: "/checkLectures",
     method: "get",
-    handler: checkLecturesHandler
-  }
+    handler: checkLecturesHandler,
+  },
 ];

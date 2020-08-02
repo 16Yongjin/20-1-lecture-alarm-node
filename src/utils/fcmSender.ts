@@ -12,8 +12,8 @@ export const sendFcm = (ids: string[], message: string) =>
       registration_ids: ids,
       notification: {
         title: message,
-        icon: "noti-icon.png"
-      }
+        icon: "noti-icon.png",
+      },
     },
-    json: true
+    json: true,
   });

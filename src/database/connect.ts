@@ -11,7 +11,7 @@ const createDatabaseConnection = (): Promise<Connection> =>
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DATABASE,
     entities: Object.values(entities),
-    synchronize: true
+    synchronize: true,
   });
 
 export default createDatabaseConnection;

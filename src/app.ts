@@ -1,9 +1,9 @@
 import express, { Express } from "express";
+import monitor from "express-status-monitor";
 import { applyMiddleware, applyRoutes } from "./utils";
 import middleware from "./middleware";
-import routes from "./services";
 import errorHandlers from "./middleware/errorHandlers";
-import monitor from "express-status-monitor";
+import routes from "./services";
 import { io } from "./socket";
 
 const initializeApp = (): Express => {

@@ -16,7 +16,7 @@ export const alarmJob = new CronJob({
     console.log("alarm start");
     checkLectures();
   },
-  timeZone: "Asia/Seoul"
+  timeZone: "Asia/Seoul",
 });
 
 export const startCron = async (req: Request, res: Response): Promise<void> => {
@@ -45,7 +45,7 @@ export const findAlarms = async (
   try {
     const lectures = await Lecture.find({
       relations: ["users"],
-      join: { alias: "lectures", innerJoin: { users: "lectures.users" } }
+      join: { alias: "lectures", innerJoin: { users: "lectures.users" } },
     });
     res.send(lectures);
   } catch {
@@ -94,14 +94,14 @@ export const getDashboardData = async (
     const users = await User.find({ relations: ["lectures"] });
     const alarms = await Lecture.find({
       relations: ["users"],
-      join: { alias: "lectures", innerJoin: { users: "lectures.users" } }
+      join: { alias: "lectures", innerJoin: { users: "lectures.users" } },
     });
     const completedAlarms = await readFile("alarm.log");
 
     res.send({
       users,
       alarms,
-      completedAlarms: completedAlarms.toString("utf-8")
+      completedAlarms: completedAlarms.toString("utf-8"),
     });
   } catch {
     res.sendStatus(500);

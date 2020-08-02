@@ -21,9 +21,6 @@ export class Lecture extends BaseEntity {
   @Column()
   courseId: string;
 
-  @ManyToMany(
-    () => User,
-    user => user.lectures
-  )
+  @ManyToMany(() => User, (user) => user.lectures)
   users: User[];
 }

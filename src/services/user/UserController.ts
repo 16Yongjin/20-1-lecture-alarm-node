@@ -43,7 +43,7 @@ export const deleteUserAlarm = async (
   let user = await User.findOne(userId, { relations: ["lectures"] });
 
   if (user) {
-    user.lectures = user.lectures.filter(lecture => lecture.id !== lectureId);
+    user.lectures = user.lectures.filter((lecture) => lecture.id !== lectureId);
     user = await user.save();
   } else {
     user = await User.create({ id: userId, lectures: [] }).save();
