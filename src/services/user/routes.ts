@@ -7,7 +7,6 @@ import {
   findLectures,
   addUserAlarm,
   deleteUserAlarm,
-  deprecatedAlarm,
 } from "./UserController";
 
 export default [
@@ -30,10 +29,5 @@ export default [
     path: "/users/:userId/:lectureId",
     method: "delete",
     handler: [checkDeleteUserAlarmBody, deleteUserAlarm],
-  },
-  {
-    path: "/myalarm",
-    method: "post",
-    handler: deprecatedAlarm,
   },
 ];
