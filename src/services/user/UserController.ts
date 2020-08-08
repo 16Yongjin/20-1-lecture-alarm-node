@@ -7,7 +7,16 @@ export const findLectures = async (
   { params: { userId, courseId } }: Request,
   res: Response
 ): Promise<void> => {
-  const lectures = await Lecture.find({ where: { courseId } });
+  const lectures = await Lecture.createQueryBuilder("lecture")
+    .where("lecture.courseId = :courseId", { courseId })
+    .leftJoinAndSelect("lecture.users", "users", "users.id = :userId", { userId })
+    .getMany();
+
+  lectures.forEach((lecture) => {
+    lecture.registered = !!lecture.users.length;
+    delete lecture.users;
+  });
+
   res.send(lectures);
 };
 
