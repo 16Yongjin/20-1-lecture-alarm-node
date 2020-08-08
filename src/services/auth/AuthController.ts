@@ -9,11 +9,9 @@ export const issueAdminToken = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  console.log(req.body, process.env.ADMIN_ID);
   const { id, password } = req.body;
 
   if (process.env.ADMIN_ID === id && process.env.ADMIN_PASSWORD === password) {
-    console.log("hi");
     const token = await issueToken();
     res.send(token);
   } else {

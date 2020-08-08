@@ -4,6 +4,7 @@ import {
 } from "./../../middleware/checks";
 import {
   findUserAlarm,
+  findLectures,
   addUserAlarm,
   deleteUserAlarm,
   deprecatedAlarm,
@@ -14,6 +15,11 @@ export default [
     path: "/users/:id",
     method: "get",
     handler: findUserAlarm,
+  },
+  {
+    path: "/users/:userId/:courseId",
+    method: "get",
+    handler: findLectures,
   },
   {
     path: "/users",

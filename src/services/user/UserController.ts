@@ -3,6 +3,14 @@ import { Request, Response, NextFunction } from "express";
 import { User, Lecture } from "../../entities";
 import { HTTP400Error } from "./../../utils/httpErrors";
 
+export const findLectures = async (
+  { params: { userId, courseId } }: Request,
+  res: Response
+): Promise<void> => {
+  const lectures = await Lecture.find({ where: { courseId } });
+  res.send(lectures);
+};
+
 export const findUserAlarm = async (
   { params: { id } }: Request,
   res: Response

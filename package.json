@@ -35,7 +35,7 @@
     "@types/winston": "^2.4.4",
     "jest": "^25.1.0",
     "supertest": "^4.0.2",
-    "ts-jest": "^25.2.1",
+    "ts-jest": "^25.5.1",
     "tsc-watch": "^4.1.0",
     "typescript": "^3.8.2"
   },
@@ -52,7 +52,7 @@
     "lodash": "^4.17.19",
     "morgan": "^1.9.1",
     "node-cron": "^2.0.3",
-    "pg": "^7.18.2",
+    "pg": "^8.3.0",
     "pm2": "^4.4.0",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",

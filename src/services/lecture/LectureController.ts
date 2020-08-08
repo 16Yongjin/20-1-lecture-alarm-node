@@ -31,11 +31,11 @@ export const storeLectures = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  // const count = await Lecture.count();
-  // if (count >= 4185) {
-  //   res.send("already stored lectures");
-  //   return;
-  // }
+  const existing = await Lecture.count();
+  if (existing >= 3772) {
+    res.send("already stored lectures");
+    return;
+  }
 
   const courseIds = chain(courses).values().flatten().map(1).value();
 
@@ -55,5 +55,7 @@ export const storeLectures = async (
     console.log("완료..", saved.length);
   }
 
-  res.send("Ok");
+  const count = await Lecture.count();
+
+  res.send(`Stored ${count} lectures`);
 };

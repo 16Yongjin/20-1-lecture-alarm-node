@@ -3,11 +3,19 @@ import { User, Lecture } from "../entities";
 const seedLectures = (): Promise<Lecture[]> => {
   const lectures = [
     Lecture.create({
-      id: "V41002101",
+      id: "V41006101",
       index: 0,
-      name: "컴퓨터수학",
-      professor: "이민나",
-      time: "월 1 2 3",
+      name: "자료구조",
+      professor: "윤성진",
+      time: "월 4 5 6",
+      courseId: "ATMB3_H1",
+    }),
+    Lecture.create({
+      id: "V41005101",
+      index: 1,
+      name: "확률과통계",
+      professor: "함건희",
+      time: "금 10 11 12",
       courseId: "ATMB3_H1",
     }),
     Lecture.create({
@@ -56,7 +64,7 @@ const seedLectures = (): Promise<Lecture[]> => {
 };
 
 const seedUser = (lectures: Lecture[]): Promise<User[]> => {
-  const alarms = [
+  const users = [
     User.create({
       id: "1",
       lectures: lectures.slice(0, 2),
@@ -71,7 +79,7 @@ const seedUser = (lectures: Lecture[]): Promise<User[]> => {
     }),
   ];
 
-  return User.save(alarms);
+  return User.save(users);
 };
 
 const createTestData = async (): Promise<void> => {

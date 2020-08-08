@@ -25,26 +25,26 @@ afterAll(async () => {
 });
 
 describe("Lecture Service", () => {
-  describe("GET /lectures/:courseId", () => {
+  describe("GET /v1/lectures/:courseId", () => {
     it("코스명 ATMB3_H1 강의들 가져오기", async () => {
-      const response = await request(router).get("/lectures/ATMB3_H1");
-      expect(response.status).toEqual(200);
-      expect(response.body).toHaveLength(1);
-    });
-  });
-
-  describe("GET /lectures/search", () => {
-    it("컴퓨터가 들어가는 강의 검색하기", async () => {
-      const response = await request(router).get(
-        `/lectures/search?name=${encodeURIComponent("컴퓨터")}`
-      );
+      const response = await request(router).get("/v1/lectures/ATMB3_H1");
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(2);
     });
+  });
 
-    it("이민나 교수님 강의 검색하기", async () => {
+  describe("GET /v1/lectures/search", () => {
+    it("컴퓨터가 들어가는 강의 검색하기", async () => {
       const response = await request(router).get(
-        `/lectures/search?name=${encodeURIComponent("이민나")}`
+        `/v1/lectures/search?name=${encodeURIComponent("컴퓨터")}`
+      );
+      expect(response.status).toEqual(200);
+      expect(response.body).toHaveLength(1);
+    });
+
+    it("윤성진 교수님 강의 검색하기", async () => {
+      const response = await request(router).get(
+        `/v1/lectures/search?name=${encodeURIComponent("윤성진")}`
       );
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(1);
@@ -53,39 +53,59 @@ describe("Lecture Service", () => {
 });
 
 describe("User Service", () => {
-  describe("GET /users/:id", () => {
+  describe("GET /v1/users/:id", () => {
     it("기존 유저 가져오기", async () => {
-      const response = await request(router).get("/users/1");
+      const response = await request(router).get("/v1/users/1");
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(2);
     });
 
     it("없으면 생성해서 유저 가져오기", async () => {
-      const response = await request(router).get("/users/newuser");
+      const response = await request(router).get("/v1/users/newuser");
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(0);
     });
   });
 
-  describe("POST /users", () => {
-    it("알람이 2개인 기존 유저에 알람 추가", async () => {
-      const existingUserRes = await request(router).get("/users/2");
-      expect(existingUserRes.status).toEqual(200);
-      expect(existingUserRes.body).toHaveLength(2);
-
-      const response = await request(router).post("/users").send({
-        userId: "2",
-        lectureId: "V41002101",
+  describe("GET /v1/users/:userId/:courseId", () => {
+    it.only("강의 목록 중에 유저가 등록한 강의면 registered 표시", async () => {
+      const userId = '777';
+      const response1 = await request(router).post("/v1/users").send({
+        userId,
+        lectureId: "V41006101",
       });
 
-      expect(response.status).toEqual(200);
+      
+      expect(response1.body).toHaveLength(1);
+      
+      const response2 = await request(router).get(`/v1/users/${userId}/ATMB3_H1`);
+      
+      console.log(response2.body);
+      
+      expect(response2.body[0]).toHaveProperty('registered');
+      expect(response2.body[0].registered).toBeTruthy();
+    })
+  })
+
+  describe("POST /v1/users", () => {
+    it("알람이 2개인 기존 유저에 알람 추가", async () => {
+      const existingUserRes = await request(router).get("/v1/users/2");
+
+      expect(existingUserRes.body).toHaveLength(2);
+      expect(existingUserRes.status).toEqual(200);
+
+      const response = await request(router).post("/v1/users").send({
+        userId: "2",
+        lectureId: "U71187101",
+      });
+
       expect(response.body).toHaveLength(3);
     });
 
     it("기존에 없던 유저에 알람 추가 ", async () => {
-      const response = await request(router).post("/users").send({
+      const response = await request(router).post("/v1/users").send({
         userId: "100",
-        lectureId: "V41002101",
+        lectureId: "U72207302",
       });
 
       expect(response.status).toEqual(200);
@@ -93,17 +113,17 @@ describe("User Service", () => {
     });
 
     it("이미 추가된 알람은 가볍게 무시", async () => {
-      const response1 = await request(router).post("/users").send({
+      const response1 = await request(router).post("/v1/users").send({
         userId: "addAgain",
-        lectureId: "V41002101",
+        lectureId: "U72207302",
       });
 
       expect(response1.status).toEqual(200);
       expect(response1.body).toHaveLength(1);
 
-      const response2 = await request(router).post("/users").send({
+      const response2 = await request(router).post("/v1/users").send({
         userId: "addAgain",
-        lectureId: "V41002101",
+        lectureId: "U72207302",
       });
 
       expect(response2.status).toEqual(200);
@@ -111,7 +131,7 @@ describe("User Service", () => {
     });
 
     it("존재하지 않는 강의 등록 시 400 에러", async () => {
-      const response = await request(router).post("/users").send({
+      const response = await request(router).post("/v1/users").send({
         userId: "100",
         lectureId: "INVALID",
       });
@@ -120,21 +140,21 @@ describe("User Service", () => {
     });
   });
 
-  describe("DELETE /users/:userId/:lectureId", () => {
+  describe("DELETE /v1/users/:userId/:lectureId", () => {
     it("기존 유저의 알람 삭제", async () => {
-      const existingUserRes = await request(router).get("/users/3");
+      const existingUserRes = await request(router).get("/v1/users/3");
       expect(existingUserRes.status).toEqual(200);
-      expect(existingUserRes.body).toHaveLength(2);
+      expect(existingUserRes.body).toHaveLength(3);
 
-      const response = await request(router).delete("/users/3/U71189101");
+      const response = await request(router).delete("/v1/users/3/U71189101");
 
       expect(response.status).toEqual(200);
-      expect(response.body).toHaveLength(1);
+      expect(response.body).toHaveLength(2);
     });
 
     it("없는 유저는 생성 후 알람이 빈 상태로 반환", async () => {
       const response = await request(router).delete(
-        "/users/deleteNon-ExisintgUser/U71189101"
+        "/v1/users/deleteNon-ExisintgUser/U71189101"
       );
 
       expect(response.status).toEqual(200);
@@ -143,17 +163,49 @@ describe("User Service", () => {
   });
 });
 
+describe("Auth Service", () => {
+  describe("/v1/auth/admin", () => {
+    it("어드민 인증 토큰 발급", async () => {
+      const response = await request(router).post("/v1/auth/admin").send({
+        id: process.env.ADMIN_ID,
+        password: process.env.ADMIN_PASSWORD,
+      });
+
+      expect(response.status).toEqual(200);
+    })
+  })
+})
+
 describe("Admin Service", () => {
-  describe("/admin/users", () => {
+  describe("/v1/admin/users", () => {
     it("모든 유저 가져옴", async () => {
-      const response = await request(router).get("/admin/users");
+      const authResponse = await request(router).post("/v1/auth/admin").send({
+        id: process.env.ADMIN_ID,
+        password: process.env.ADMIN_PASSWORD,
+      });
+
+      const token = authResponse.text;
+
+      const response = await request(router)
+        .get("/v1/admin/users")
+        .set('Authorization', `Bearer ${token}`);
       expect(response.status).toEqual(200);
     });
   });
 
-  describe("/admin/alarms", () => {
+  describe("/v1/admin/alarms", () => {
     it("알람으로 등록된 모든 강의 가져옴", async () => {
-      const response = await request(router).get("/admin/alarms");
+      const authResponse = await request(router).post("/v1/auth/admin").send({
+        id: process.env.ADMIN_ID,
+        password: process.env.ADMIN_PASSWORD,
+      });
+
+      const token = authResponse.text;
+
+      const response = await request(router)
+        .get("/v1/admin/alarms")
+        .set('Authorization', `Bearer ${token}`);
+
       expect(response.status).toEqual(200);
     });
   });
