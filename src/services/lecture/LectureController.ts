@@ -14,13 +14,13 @@ export const findLectures = async (
 };
 
 export const searchLectures = async (
-  { query: { name } }: Request,
+  { query: { query } }: Request,
   res: Response
 ): Promise<void> => {
   const lectures = await Lecture.find({
     where: [
-      { name: Raw((alias) => `${alias} ILIKE '%${name}%'`) },
-      { professor: Raw((alias) => `${alias} ILIKE '%${name}%'`) },
+      { name: Raw((alias) => `${alias} ILIKE '%${query}%'`) },
+      { professor: Raw((alias) => `${alias} ILIKE '%${query}%'`) },
     ],
     take: 30,
   });

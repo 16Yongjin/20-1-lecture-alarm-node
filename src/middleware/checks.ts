@@ -15,7 +15,7 @@ export const checkLectureSearchParams = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.query.name)
+  if (!req.query.query)
     next(new HTTP400Error("검색할 강의 이름을 입력해주세요."));
   else next();
 };

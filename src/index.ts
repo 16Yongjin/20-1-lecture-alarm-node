@@ -34,7 +34,7 @@ const main = async () => {
     console.log(`Server is running http://localhost:${PORT}`)
   );
 
-  // alarmJob.start();
+  alarmJob.start();
 };
 
 main();

@@ -8,6 +8,7 @@ import { Connection } from "typeorm";
 import initializeApp from "./app";
 import createTestDatabaseConnection from "./database/connectTest";
 import createTestData from "./database/createTestData";
+import { Lecture } from "./entities";
 
 let router: Router;
 let connection: Connection;
@@ -36,7 +37,7 @@ describe("Lecture Service", () => {
   describe("GET /v1/lectures/search", () => {
     it("컴퓨터가 들어가는 강의 검색하기", async () => {
       const response = await request(router).get(
-        `/v1/lectures/search?name=${encodeURIComponent("컴퓨터")}`
+        `/v1/lectures/search?query=${encodeURIComponent("컴퓨터")}`
       );
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(1);
@@ -44,7 +45,7 @@ describe("Lecture Service", () => {
 
     it("윤성진 교수님 강의 검색하기", async () => {
       const response = await request(router).get(
-        `/v1/lectures/search?name=${encodeURIComponent("윤성진")}`
+        `/v1/lectures/search?query=${encodeURIComponent("윤성진")}`
       );
       expect(response.status).toEqual(200);
       expect(response.body).toHaveLength(1);
@@ -68,24 +69,44 @@ describe("User Service", () => {
   });
 
   describe("GET /v1/users/:userId/:courseId", () => {
-    it.only("강의 목록 중에 유저가 등록한 강의면 registered 표시", async () => {
+    it("강의 목록 중에 유저가 등록한 강의면 registered 표시", async () => {
       const userId = '777';
       const response1 = await request(router).post("/v1/users").send({
         userId,
         lectureId: "V41006101",
       });
 
-      
+
       expect(response1.body).toHaveLength(1);
-      
+
       const response2 = await request(router).get(`/v1/users/${userId}/ATMB3_H1`);
-      
+
       console.log(response2.body);
-      
+
       expect(response2.body[0]).toHaveProperty('registered');
       expect(response2.body[0].registered).toBeTruthy();
     })
   })
+
+  describe("GET /v1/users/:userId/search", () => {
+    it("검색한 강의 중 유저가 등록한 강의 표시", async () => {
+      const userId = '888';
+      const response1 = await request(router).post("/v1/users").send({
+        userId,
+        lectureId: "V41006101",
+      });
+
+      expect(response1.body).toHaveLength(1);
+
+      const response2 = await request(router).get(
+        `/v1/users/888/search?query=${encodeURIComponent("자료")}`
+      );
+
+      expect((response2.body as Lecture[]).some(l => l.registered)).toBeTruthy()
+    })
+  })
+
+
 
   describe("POST /v1/users", () => {
     it("알람이 2개인 기존 유저에 알람 추가", async () => {
