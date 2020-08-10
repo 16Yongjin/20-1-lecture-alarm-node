@@ -1,6 +1,3 @@
-import { flatten } from "lodash";
-import jwt from "express-jwt";
-import { Route, Handler } from "./../../utils/index";
 import {
   findUsers,
   findAlarms,
@@ -13,42 +10,43 @@ import {
   sendAlarmLogViewer,
   getDashboardData,
 } from "./AdminController";
+import { checkAuth } from "../../middleware/checks";
 
 export default [
   {
     path: "/admin/users",
     method: "get",
-    handler: findUsers,
+    handler: [checkAuth, findUsers],
   },
   {
     path: "/admin/alarms",
     method: "get",
-    handler: findAlarms,
+    handler: [checkAuth, findAlarms],
   },
   {
     path: "/admin/startCron",
     method: "get",
-    handler: startCron,
+    handler: [checkAuth, startCron],
   },
   {
     path: "/admin/stopCron",
     method: "get",
-    handler: stopCron,
+    handler: [checkAuth, stopCron],
   },
   {
     path: "/admin/logs",
     method: "get",
-    handler: findLogs,
+    handler: [checkAuth, findLogs],
   },
   {
     path: "/admin/errors",
     method: "get",
-    handler: findErrors,
+    handler: [checkAuth, findErrors],
   },
   {
     path: "/admin/completedAlarms",
     method: "get",
-    handler: findCompletedAlarms,
+    handler: [checkAuth, findCompletedAlarms],
   },
   {
     path: "/admin/logViewer",
@@ -63,18 +61,6 @@ export default [
   {
     path: "/admin/dashboardData",
     method: "get",
-    handler: getDashboardData,
+    handler: [checkAuth, getDashboardData],
   },
-].map(({ path, method, handler }: Route) => {
-  return {
-    path,
-    method,
-    handler: flatten([
-      jwt({
-        secret: process.env.JWT_SECRET || "1q2w3e4r",
-        algorithms: ["HS256"],
-      }) as Handler,
-      handler,
-    ]),
-  };
-});
+]

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { HTTP400Error } from "../utils/httpErrors";
+import jwt from "express-jwt";
 
 export const checkLectureParams = (
   req: Request,
@@ -57,3 +58,8 @@ export const checkAdminAuthBody = async (
   if (!id || !password) next(new HTTP400Error("Missing id or password"));
   else next();
 };
+
+export const checkAuth = jwt({
+  secret: process.env.JWT_SECRET || "1q2w3e4r",
+  algorithms: ["HS256"],
+})
