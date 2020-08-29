@@ -2,6 +2,7 @@ import request from "request-promise";
 import cheerio from "cheerio";
 import { logger } from "./../../../utils/logger";
 import { Lecture } from "./../../../entities/Lecture";
+import { sendMailDebounce } from "src/utils/mail";
 
 type FetchedLecture = {
   index: number;
@@ -85,7 +86,9 @@ export const filterLectures = async (
   console.time(`fetch ${courseId}`);
 
   const fetchedLectures = await getLectures(courseId).catch((e: Error) => {
-    logger.error(`[Feching Lecture Error] courseId: ${courseId}, ${e.message}`);
+    const errorLog = `[Feching Lecture Error] courseId: ${courseId}, ${e.message}`
+    logger.error(errorLog);
+    sendMailDebounce("빈자리 알람 서버 에러 발생", errorLog)
     return [];
   });
 
