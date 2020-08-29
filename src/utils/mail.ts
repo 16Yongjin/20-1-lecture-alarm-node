@@ -2,6 +2,7 @@ import "dotenv/config";
 
 import nodemailer from 'nodemailer'
 import { debounce } from 'lodash'
+import { logger } from "./logger";
 
 
 export const sendMail = async (title: string, text: string) => {
@@ -18,7 +19,7 @@ export const sendMail = async (title: string, text: string) => {
     to: process.env.EMAIL_SUBSCRIPTION,
     subject: title,
     text,
-  });
+  }).catch((error) => logger.error(error.message));
 
   return info
 }

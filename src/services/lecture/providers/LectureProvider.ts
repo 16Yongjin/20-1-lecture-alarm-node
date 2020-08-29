@@ -88,7 +88,7 @@ export const filterLectures = async (
   const fetchedLectures = await getLectures(courseId).catch((e: Error) => {
     const errorLog = `[Feching Lecture Error] courseId: ${courseId}, ${e.message}`
     logger.error(errorLog);
-    sendMailDebounce("빈자리 알람 서버 에러 발생", errorLog)
+    sendMailDebounce("[Error] 빈자리 알람 서버 에러 발생", errorLog)
     return [];
   });
 
