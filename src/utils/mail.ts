@@ -1,5 +1,3 @@
-import "dotenv/config";
-
 import nodemailer from 'nodemailer'
 import { debounce } from 'lodash'
 import { logger } from "./logger";
@@ -15,8 +13,8 @@ export const sendMail = async (title: string, text: string) => {
   });
 
   const info = await transporter.sendMail({
-    from: process.env.EMAIL_ID, // sender address
-    to: process.env.EMAIL_SUBSCRIPTION,
+    from: process.env.EMAIL_ID,
+    to: process.env.EMAIL_ID,
     subject: title,
     text,
   }).catch((error) => logger.error(error.message));

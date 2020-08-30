@@ -39,7 +39,7 @@ const main = async () => {
 
   alarmJob.start();
 
-  sendMail('[Info] 빈자리 알람 서버 시작', new Date().toLocaleDateString())
+  sendMail('[Info] 빈자리 알람 서버 시작', new Date().toString())
 };
 
 main();

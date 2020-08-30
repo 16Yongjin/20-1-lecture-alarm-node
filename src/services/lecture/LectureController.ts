@@ -32,7 +32,7 @@ export const storeLectures = async (
   res: Response
 ): Promise<void> => {
   const existing = await Lecture.count();
-  if (existing >= 3773) {
+  if (existing >= 3770) {
     res.send("already stored lectures");
     return;
   }

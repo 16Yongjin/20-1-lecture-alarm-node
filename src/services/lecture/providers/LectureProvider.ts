@@ -2,7 +2,7 @@ import request from "request-promise";
 import cheerio from "cheerio";
 import { logger } from "./../../../utils/logger";
 import { Lecture } from "./../../../entities/Lecture";
-import { sendMailDebounce } from "src/utils/mail";
+import { sendMailDebounce } from "./../../../utils/mail";
 
 type FetchedLecture = {
   index: number;
