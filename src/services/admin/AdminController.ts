@@ -11,7 +11,7 @@ const readFile = promisify(readFileCb);
 
 // '*/3 * 10-16 * * *'
 export const alarmJob = new CronJob({
-  cronTime: "*/3 * 10-15 * * *",
+  cronTime: "*/5 * 10-15 * * *",
   onTick: () => {
     console.log("alarm start");
     checkLectures();
