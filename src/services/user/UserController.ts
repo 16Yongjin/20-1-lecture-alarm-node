@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { User, Lecture } from "../../entities";
 import { HTTP400Error } from "./../../utils/httpErrors";
-import { Raw } from "typeorm";
+import { omit } from "lodash";
 
 export const findLectures = async (
   { params: { userId, courseId } }: Request,
@@ -9,16 +9,13 @@ export const findLectures = async (
 ): Promise<void> => {
   const lectures = await Lecture.createQueryBuilder("lecture")
     .where("lecture.courseId = :courseId", { courseId })
-    .leftJoinAndSelect("lecture.users", "users", "users.id = :userId", { userId })
-    .orderBy('lecture.index')
+    .leftJoinAndSelect("lecture.users", "users", "users.id = :userId", {
+      userId,
+    })
+    .orderBy("lecture.index")
     .getMany();
 
-  lectures.forEach((lecture) => {
-    lecture.registered = !!lecture.users.length;
-    delete lecture.users;
-  });
-
-  res.send(lectures);
+  res.send(lectures.map((lecture) => omit(lecture, "users")));
 };
 
 export const searchLectures = async (
@@ -28,18 +25,13 @@ export const searchLectures = async (
   const lectures = await Lecture.createQueryBuilder("lecture")
     .where("lecture.name ILIKE :query", { query: `%${query}%` })
     .orWhere("lecture.professor ILIKE :query", { query: `%${query}%` })
-    .leftJoinAndSelect("lecture.users", "users", "users.id = :userId", { userId })
+    .leftJoinAndSelect("lecture.users", "users", "users.id = :userId", {
+      userId,
+    })
     .take(30)
     .getMany();
 
-  lectures.forEach((lecture) => {
-    lecture.registered = !!lecture.users.length;
-    delete lecture.users;
-  });
-
-  console.log('searchLectures', lectures);
-
-  res.send(lectures);
+  res.send(lectures.map((lecture) => omit(lecture, "users")));
 };
 
 export const findUserAlarm = async (

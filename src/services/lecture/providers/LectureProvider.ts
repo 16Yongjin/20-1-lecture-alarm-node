@@ -2,7 +2,7 @@ import request from "request-promise";
 import cheerio from "cheerio";
 import { logger } from "./../../../utils/logger";
 import { Lecture } from "./../../../entities/Lecture";
-import { sendMailDebounce } from "./../../../utils/mail";
+import { sendTelegramMessageDebounce } from "./../../../utils/telegram";
 
 type FetchedLecture = {
   index: number;
@@ -18,8 +18,8 @@ const url = "https://wis.hufs.ac.kr/src08/jsp/lecture/LECTURE2020L.jsp";
 
 const buildForm = (courseId: string) => {
   return {
-    ag_ledg_year: "2020",
-    ag_ledg_sessn: "3",
+    ag_ledg_year: "2021",
+    ag_ledg_sessn: "1",
     ag_org_sect: "A",
     campus_sect: courseId.slice(0, 2),
     gubun: courseId.startsWith("A") ? "1" : "2",
@@ -86,9 +86,11 @@ export const filterLectures = async (
   console.time(`fetch ${courseId}`);
 
   const fetchedLectures = await getLectures(courseId).catch((e: Error) => {
-    const errorLog = `[Feching Lecture Error] courseId: ${courseId}, ${e.message}`
+    const errorLog = `[Feching Lecture Error] courseId: ${courseId}, ${e.message}`;
     logger.error(errorLog);
-    sendMailDebounce("[Error] 빈자리 알람 서버 에러 발생", errorLog)
+    sendTelegramMessageDebounce(
+      `[Error] 빈자리 알람 서버 에러 발생 ${errorLog}`
+    );
     return [];
   });
 

@@ -6,19 +6,19 @@ import createDatabaseConnection from "./database/connect";
 import initializeApp from "./app";
 import { io } from "./socket";
 import { alarmJob } from "./services/admin/AdminController";
-import { sendMail } from "./utils/mail";
+import { sendTelegramMessage } from "./utils/telegram";
 
 process.on("uncaughtException", (e) => {
   console.error(e);
   logger.error(`Closeing server : ${e.message}`);
-  sendMail('[Error] 빈자리 알람 서버 강제 종료', e.message);
+  sendTelegramMessage(`[Error] 빈자리 알람 서버 강제 종료, ${e.message}`);
   process.exit(1);
 });
 
 process.on("unhandledRejection", (e) => {
   console.error(e);
   logger.error(`Closeing server : ${e}`);
-  sendMail('[Error] 빈자리 알람 서버 강제 종료', 'unhandledRejection');
+  sendTelegramMessage(`[Error] 빈자리 알람 서버 강제 종료 ${e}`);
   process.exit(1);
 });
 
@@ -39,7 +39,7 @@ const main = async () => {
 
   alarmJob.start();
 
-  sendMail('[Info] 빈자리 알람 서버 시작', new Date().toString())
+  sendTelegramMessage(`[Info] 빈자리 알람 서버 시작 ${new Date().toString()}`);
 };
 
 main();

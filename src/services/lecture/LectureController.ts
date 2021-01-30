@@ -4,6 +4,7 @@ import { Raw } from "typeorm";
 import { courses } from "./providers/courses";
 import { Lecture } from "./../../entities";
 import { getLectures } from "./providers/LectureProvider";
+import { sendTelegramMessage } from "../../utils/telegram";
 
 export const findLectures = async (
   { params: { courseId } }: Request,
@@ -32,14 +33,14 @@ export const storeLectures = async (
   res: Response
 ): Promise<void> => {
   const existing = await Lecture.count();
-  if (existing >= 3770) {
+  if (existing >= 3772) {
     res.send("already stored lectures");
     return;
   }
 
   const courseIds = chain(courses).values().flatten().map(1).value();
 
-  const skip = req.query.skip || 0;
+  const skip = parseInt((req.query.skip as string) || "0");
 
   for (const courses of chunk(courseIds.slice(skip), 10)) {
     console.log(`fething : ${courses.join(", ")}`);
@@ -58,4 +59,6 @@ export const storeLectures = async (
   const count = await Lecture.count();
 
   res.send(`Stored ${count} lectures`);
+
+  sendTelegramMessage(`${count}개의 강의 저장`);
 };

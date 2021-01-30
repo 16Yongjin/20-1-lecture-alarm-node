@@ -8,7 +8,8 @@
     "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
     "test": "jest",
     "test-dev": "jest --watch",
-    "start": "npx pm2 start pm2.yaml --env production"
+    "start": "npx pm2 start pm2.yaml --env production",
+    "gen-env": "npx gen-env-types .env -o src/env.d.ts -e ."
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,7 @@
     "@types/morgan": "^1.9.2",
     "@types/node": "^13.13.40",
     "@types/node-cron": "^2.0.3",
+    "@types/node-telegram-bot-api": "^0.51.0",
     "@types/nodemailer": "^6.4.0",
     "@types/request-promise": "^4.1.47",
     "@types/socket.io": "^2.1.13",
@@ -53,6 +55,7 @@
     "lodash": "^4.17.20",
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
+    "node-telegram-bot-api": "^0.51.0",
     "nodemailer": "^6.4.17",
     "pg": "^8.5.1",
     "pm2": "^4.5.2",
