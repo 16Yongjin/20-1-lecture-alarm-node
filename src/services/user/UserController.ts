@@ -15,7 +15,12 @@ export const findLectures = async (
     .orderBy("lecture.index")
     .getMany();
 
-  res.send(lectures.map((lecture) => omit(lecture, "users")));
+  res.send(
+    lectures.map((lecture) => ({
+      ...omit(lecture, "users"),
+      registered: !!lecture.users.length,
+    }))
+  );
 };
 
 export const searchLectures = async (
@@ -31,7 +36,12 @@ export const searchLectures = async (
     .take(30)
     .getMany();
 
-  res.send(lectures.map((lecture) => omit(lecture, "users")));
+  res.send(
+    lectures.map((lecture) => ({
+      ...omit(lecture, "users"),
+      registered: !!lecture.users.length,
+    }))
+  );
 };
 
 export const findUserAlarm = async (
@@ -42,9 +52,12 @@ export const findUserAlarm = async (
 
   if (!user) user = await User.create({ id, lectures: [] }).save();
 
-  user.lectures.forEach((lecture) => (lecture.registered = true));
+  const lectures = user.lectures.map((lecture) => ({
+    ...lecture,
+    registered: true,
+  }));
 
-  res.send(user.lectures);
+  res.send(lectures);
 };
 
 export const addUserAlarm = async (
@@ -71,9 +84,12 @@ export const addUserAlarm = async (
     user = await User.create({ id: userId, lectures: [lecture] }).save();
   }
 
-  user.lectures.forEach((lecture) => (lecture.registered = true));
+  const lectures = user.lectures.map((lecture) => ({
+    ...lecture,
+    registered: true,
+  }));
 
-  res.send(user.lectures);
+  res.send(lectures);
 };
 
 export const deleteUserAlarm = async (
@@ -89,7 +105,10 @@ export const deleteUserAlarm = async (
     user = await User.create({ id: userId, lectures: [] }).save();
   }
 
-  user.lectures.forEach((lecture) => (lecture.registered = true));
+  const lectures = user.lectures.map((lecture) => ({
+    ...lecture,
+    registered: true,
+  }));
 
-  res.send(user.lectures);
+  res.send(lectures);
 };
