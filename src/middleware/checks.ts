@@ -62,4 +62,4 @@ export const checkAdminAuthBody = async (
 export const checkAuth = jwt({
   secret: process.env.JWT_SECRET || "1q2w3e4r",
   algorithms: ["HS256"],
-})
+});

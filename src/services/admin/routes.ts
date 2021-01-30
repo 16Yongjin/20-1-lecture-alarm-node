@@ -63,4 +63,4 @@ export default [
     method: "get",
     handler: [checkAuth, getDashboardData],
   },
-]
+];
