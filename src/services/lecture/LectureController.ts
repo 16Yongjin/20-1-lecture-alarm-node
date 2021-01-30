@@ -40,7 +40,7 @@ export const storeLectures = async (
 
   const courseIds = chain(courses).values().flatten().map(1).value();
 
-  const skip = parseInt((req.query.skip as string) || "0");
+  const skip = parseInt((req.query.skip as string) ?? 0);
 
   for (const courses of chunk(courseIds.slice(skip), 10)) {
     console.log(`fething : ${courses.join(", ")}`);
