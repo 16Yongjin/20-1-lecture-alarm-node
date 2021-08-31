@@ -1,3 +1,6 @@
+// copy($$('[name="ag_crs_strct_cd"] option').map(v => [v.innerText.match(/\) - (.+) \(/)?.[1], v.value]))
+// copy($$('[name="ag_compt_fld_cd"] option').map(v => [v.innerText.trim(), v.value]))
+
 export const courses = {
   서울전공: [
     ["AI융합전공", "A4BA1_H1"],
