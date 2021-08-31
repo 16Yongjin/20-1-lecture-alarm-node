@@ -19,7 +19,7 @@ const url = "https://wis.hufs.ac.kr/src08/jsp/lecture/LECTURE2020L.jsp";
 const buildForm = (courseId: string) => {
   return {
     ag_ledg_year: "2021",
-    ag_ledg_sessn: "1",
+    ag_ledg_sessn: "3",
     ag_org_sect: "A",
     campus_sect: courseId.slice(0, 2),
     gubun: courseId.startsWith("A") ? "1" : "2",
